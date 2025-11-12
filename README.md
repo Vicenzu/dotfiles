@@ -8,7 +8,7 @@ These dotfiles include configuration for my daily setup:
 
 - 🧭 **Zsh + Oh-My-Zsh + Powerlevel10k**
 - 💻 **Neovim 0.11+** (LSP, Lua config)
-- </> **Konsole** terminal
+- </> **Kitty** terminal
 - 🧊  **Wofi**
 - ⚙️ **Fastfetch**, **Btop**, **Lazygit**
 - 🧰 Custom scripts for system maintenance and battery management
@@ -30,9 +30,7 @@ These dotfiles include configuration for my daily setup:
 
 │ ├── nvim/
 
-│ ├── konsolerc
-
-│ ├── konsolesshconfig
+│ ├── kitty/
 
 │ ├── fastfetch/
 

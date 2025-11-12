@@ -43,9 +43,6 @@ return {
       vim.lsp.enable("jdtls");
       vim.lsp.enable("clangd");
 
-     
-      
-
       --Shortcuts
       vim.keymap.set('n', 'K', vim.lsp.buf.hover, {})
       vim.keymap.set('n', 'gd', vim.lsp.buf.definition, {})

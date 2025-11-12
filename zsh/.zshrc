@@ -131,3 +131,18 @@ export PATH=$PATH:$ANDROID_HOME/platform-tools
 # Java JDK (OpenJDK 21)
 export JAVA_HOME=/usr/lib/jvm/java-21-openjdk
 export PATH=$JAVA_HOME/bin:$PATH
+
+
+#---------------------------------
+#         PATH RELATIVO
+#---------------------------------
+export PATH="$PATH:$HOME:." #aggiunge la home e la cartella corrente al path di ricerca
+
+#Variabile d'ambiente per tmuxifier
+export PATH="$HOME/.tmuxifier/bin:$PATH"
+eval "$(tmuxifier init -)"
+
+alias dots='cd ~/dotfiles'
+alias dotsync='cd ~/dotfiles && git add . && git commit -m "update dotfiles" && git push'
+alias dotpull='cd ~/dotfiles && git pull && stow -R .'
+
