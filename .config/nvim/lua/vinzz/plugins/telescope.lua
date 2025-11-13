@@ -4,9 +4,11 @@ return {
 
     config = function()
       local builtin = require("telescope.builtin")
-      vim.keymap.set('n', '<leader>f', builtin.find_files, {}) --ctrl+p ricerca file
+      vim.keymap.set('n', '<leader>ff', builtin.find_files, {}) --ctrl+p ricerca file
       vim.keymap.set('n', '<leader>fg', builtin.live_grep, {}) --space+fg ricerca parole
     end
+
+
   },
   {
     "nvim-telescope/telescope-ui-select.nvim",
