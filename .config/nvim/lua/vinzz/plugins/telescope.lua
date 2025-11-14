@@ -4,8 +4,8 @@ return {
 
     config = function()
       local builtin = require("telescope.builtin")
-      vim.keymap.set('n', '<leader>ff', builtin.find_files, {}) --ctrl+p ricerca file
-      vim.keymap.set('n', '<leader>fg', builtin.live_grep, {}) --space+fg ricerca parole
+      vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = "Find File"}) --ctrl+p ricerca file
+      vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = "Live Grep"}) --space+fg ricerca parole
     end
 
 

@@ -17,6 +17,12 @@ return {
 			require("mason-lspconfig").setup({
 				ensure_installed = {
 					"lua_ls",
+					"emmet_ls",
+					"emmet_language_server",
+					"denols",
+					"asm_lsp",
+					"ts_ls",
+					"sqlls",
 					"omnisharp",
 					"basedpyright",
 					"jdtls",
@@ -28,56 +34,229 @@ return {
 	{
 		"neovim/nvim-lspconfig",
 		lazy = false,
+
 		config = function()
 			local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-			vim.diagnostic.config({
-				virtual_text = true,
-				signs = true,
-				underline = true,
-				update_in_insert = false,
-			})
+      -- Diagnostic signs
+local signs = {
+    Error = " ",
+    Warn  = " ",
+    Hint  = "󰠠 ",
+    Info  = " ",
+}
 
-			local on_attach = function(client, bufnr)
-				--Shortcuts
-				vim.keymap.set("n", "K", vim.lsp.buf.hover, {})
-				vim.keymap.set("n", "gd", vim.lsp.buf.definition, {})
-				vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, {})
-			end
+for type, icon in pairs(signs) do
+    local hl = "DiagnosticSign" .. type
+    vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
+end
 
-			vim.lsp.config("lua_ls", {
-				on_attach = on_attach,
-				capabilities = capabilities,
-				settings = {
-					Lua = { diagnostics = { globals = { "vim" } } },
-				},
-			})
+vim.diagnostic.config({
+    virtual_text = true,
+    underline = true,
+    update_in_insert = false,
+    signs = true,
+})
 
-			vim.lsp.config("basedpyright", {
-				on_attach = on_attach,
-				capabilities = capabilities,
-			})
+				--------------------------------------------------------------------
+				-- ON_ATTACH (keymaps quando un LSP si attacca al buffer)
+				--------------------------------------------------------------------
+				vim.api.nvim_create_autocmd("LspAttach", {
+					group = vim.api.nvim_create_augroup("LspKeymaps", {}),
+					callback = function(ev)
+						local opts = { buffer = ev.buf, silent = true }
 
-			vim.lsp.config("clangd", {
-				on_attach = on_attach,
-				capabilities = capabilities,
-			})
+						vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+						vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+						vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
+						vim.keymap.set("n", "gi", "<cmd>Telescope lsp_implementations<CR>", opts)
+						vim.keymap.set("n", "gt", "<cmd>Telescope lsp_type_definitions<CR>", opts)
+						vim.keymap.set("n", "gR", "<cmd>Telescope lsp_references<CR>", opts)
+						vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts)
+						vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
+						vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, opts)
+						vim.keymap.set("n", "<leader>D", "<cmd>Telescope diagnostics bufnr=0<CR>", opts)
+						vim.keymap.set("n", "<leader>rs", "<cmd>LspRestart<CR>", opts)
+					end,
+				})
 
-			vim.lsp.config("omnisharp", {
-				on_attach = on_attach,
-				capabilities = capabilities,
-			})
+				--------------------------------------------------------------------
+				-- PYTHON LS
+				--------------------------------------------------------------------
+				vim.lsp.config("basedpyright", {
+					capabilities = capabilities,
+					settings = {
+						basedpyright = {
+							analysis = {
+								typeCheckingMode = "basic",
+								autoSearchPaths = true,
+								useLibraryCodeForTypes = true,
+							},
+						},
+					},
+				})
 
-			-- jdtls (serve cmd/root_dir, altrimenti non parte)
+				--------------------------------------------------------------------
+				-- CLANGD (C/C++/Objective-C)
+				--------------------------------------------------------------------
+				vim.lsp.config("clangd", {
+					capabilities = capabilities,
+					cmd = {
+						"clangd",
+						"--background-index",
+						"--clang-tidy",
+						"--completion-style=detailed",
+						"--header-insertion=never",
+						"--offset-encoding=utf-16",
+					},
+				})
+
+				--------------------------------------------------------------------
+				-- OMNISHARP (C#)
+				--------------------------------------------------------------------
+				vim.lsp.config("omnisharp", {
+					capabilities = capabilities,
+					cmd = { "omnisharp" }, -- oppure il path completo se serve
+					enable_editorconfig_support = true,
+					enable_ms_build_load_projects_on_demand = true,
+					enable_roslyn_analyzers = true,
+					organize_imports_on_format = true,
+					enable_import_completion = true,
+				})
+
+				--------------------------------------------------------------------
+				-- LUA LS
+				--------------------------------------------------------------------
+				vim.lsp.config("lua_ls", {
+					capabilities = capabilities,
+					settings = {
+						Lua = {
+							diagnostics = { globals = { "vim" } },
+							completion = { callSnippet = "Replace" },
+							workspace = {
+								library = {
+									[vim.fn.expand("$VIMRUNTIME/lua")] = true,
+									[vim.fn.stdpath("config") .. "/lua"] = true,
+								},
+							},
+						},
+					},
+				})
+
+				--------------------------------------------------------------------
+				-- EMMET LS
+				--------------------------------------------------------------------
+				vim.lsp.config("emmet_ls", {
+					capabilities = capabilities,
+					filetypes = {
+						"html",
+						"typescriptreact",
+						"javascriptreact",
+						"css",
+						"sass",
+						"scss",
+						"less",
+						"svelte",
+					},
+				})
+
+				--------------------------------------------------------------------
+				-- EMMET LANGUAGE SERVER
+				--------------------------------------------------------------------
+				vim.lsp.config("emmet_language_server", {
+					capabilities = capabilities,
+					filetypes = {
+						"css",
+						"eruby",
+						"html",
+						"javascript",
+						"javascriptreact",
+						"less",
+						"sass",
+						"scss",
+						"pug",
+						"typescriptreact",
+					},
+					init_options = {
+						showExpandedAbbreviation = "always",
+						showAbbreviationSuggestions = true,
+					},
+				})
+
+				--------------------------------------------------------------------
+				-- DENOLS
+				--------------------------------------------------------------------
+				vim.lsp.config("denols", {
+					capabilities = capabilities,
+					root_dir = vim.fs.dirname(
+						vim.fs.find({ "deno.json", "deno.jsonc" }, { upward = true })[1] or vim.loop.cwd()
+					),
+				})
+
+				--------------------------------------------------------------------
+				-- ASM LSP
+				--------------------------------------------------------------------
+				vim.lsp.config("asm_lsp", {
+					cmd = { "asm-lsp" },
+					filetypes = { "s", "as", "asm", "vmasm", "nasm" },
+					root_dir = vim.fs.dirname(
+						vim.fs.find({ ".git", "*.asm", "*.s" }, { upward = true })[1] or vim.loop.cwd()
+					),
+					capabilities = capabilities,
+				})
+
+				--------------------------------------------------------------------
+				-- TS_LS (Moderno, rimpiazza tsserver)
+				--------------------------------------------------------------------
+				vim.lsp.config("ts_ls", {
+					capabilities = capabilities,
+					root_dir = function(fname)
+						local util = require("lspconfig.util")
+						return not util.root_pattern("deno.json", "deno.jsonc")(fname)
+							and util.root_pattern("tsconfig.json", "package.json", "jsconfig.json", ".git")(fname)
+					end,
+					single_file_support = false,
+					init_options = {
+						preferences = {
+							includeCompletionsWithSnippetText = true,
+							includeCompletionsForImportStatements = true,
+						},
+					},
+				})
+
+				--  ------------------------------------------------------------------
+				--                          SQL LS
+				--  ------------------------------------------------------------------
+				vim.lsp.config("sqlls", {
+					cmd = { "sql-language-server", "up", "--method", "stdio" },
+					capabilities = capabilities,
+					settings = {
+						sqls = {
+							connections = {
+								{
+									driver = "mysql",
+									dataSourceName = "giuseppec:NuovaPasswordSicura!@tcp(127.0.0.1:3306)/prova",
+								},
+								{
+									driver = "sqlite3",
+									filename = "/home/giuseppec/databases/provas.db",
+								},
+							},
+						},
+					},
+				})
+
+			-- ------------------------------------------------------------------
+			--                          JDTLS (Java)
+			-- ------------------------------------------------------------------
 			local jdtls_path = vim.fn.stdpath("data") .. "/mason/packages/jdtls"
 			local launcher_jar = vim.fn.glob(jdtls_path .. "/plugins/org.eclipse.equinox.launcher_*.jar")
 			local config_dir = jdtls_path .. "/config_linux"
-			local workspace_dir = vim.fn.stdpath("data")
+			local workspace = vim.fn.stdpath("data")
 				.. "/jdtls-workspace/"
 				.. vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
 
 			vim.lsp.config("jdtls", {
-				on_attach = on_attach,
 				capabilities = capabilities,
 				cmd = {
 					"java",
@@ -88,19 +267,38 @@ return {
 					"-Dlog.level=ALL",
 					"-Xms1g",
 					"-Xmx2G",
-					"-jar",launcher_jar,
-					"-configuration", config_dir,
-					"-data", workspace_dir,
+					"-jar",
+					launcher_jar,
+					"-configuration",
+					config_dir,
+					"-data",
+					workspace,
 				},
-				root_dir = vim.fs.dirname(
-					vim.fs.find({ ".git", "pom.xml", "build.gradle" }, { upward = true })[1] or vim.loop.cwd()
-				),
+				root_dir = vim.fs.dirname(vim.fs.find({
+					".git",
+					"mvnw",
+					"gradlew",
+					"pom.xml",
+					"build.gradle",
+				}, { upward = true })[1] or vim.loop.cwd()),
 			})
-			vim.lsp.enable("basedpyright")
-			vim.lsp.enable("omnisharp")
-			vim.lsp.enable("lua_ls")
-			vim.lsp.enable("jdtls")
-			vim.lsp.enable("clangd")
+
+			--------------------------------------------------------------------
+			-- ENABLE ALL SERVERS
+			--------------------------------------------------------------------
+			vim.lsp.enable({
+				"lua_ls",
+				"emmet_ls",
+				"emmet_language_server",
+				"denols",
+				"asm_lsp",
+				"ts_ls",
+				"jdtls",
+				"sqlls",
+				"basedpyright",
+				"clangd",
+				"omnisharp",
+			})
 		end,
 	},
 }
