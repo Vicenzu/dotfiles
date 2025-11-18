@@ -42,30 +42,30 @@ return { -- better jumping bt files mamma mia utilissimo
 			harpoon:list():add()
 		end, { desc = "Harpoon add file" })
 		vim.keymap.set("n", "<C-e>", function()
-			harpoon.ui:toggle_quick_menu(harpoon:list())
+			harpoon.ui:toggle_quick_menu(harpoon:list(), { desc = "Harpoon List"})
 		end)
 
 		--Harpoon marked files
 		vim.keymap.set("n", "<C-y>", function()
 			harpoon:list():select(1)
-		end)
+		end, { desc = "Harpoon Select 1"})
 		vim.keymap.set("n", "<C-i>", function()
 			harpoon:list():select(2)
-		end)
+		end, { desc = "Harpoon Select 2"})
 		vim.keymap.set("n", "<C-n>", function()
 			harpoon:list():select(3)
-		end)
+		end, { desc = "Harpoon Select 3"})
 		vim.keymap.set("n", "<C-s>", function()
 			harpoon:list():select(4)
-		end)
+		end, { desc = "Harpoon Select 4"})
 
 		-- Toggle previous & next buffers stored within Harpoon list
 		vim.keymap.set("n", "<C-S-P>", function()
 			harpoon:list():prev()
-		end)
+		end, { desc = "Toggle Previous buf within Harpoon list"})
 		vim.keymap.set("n", "<C-S-N>", function()
 			harpoon:list():next()
-		end)
+		end, { desc = "Toggle Next buf within Harpoon list"})
 
 		-- Telescope inside Harpoon Window
 		-- vim.keymap.set("n", "<C-f>", function()
@@ -73,4 +73,3 @@ return { -- better jumping bt files mamma mia utilissimo
 		-- end)
 	end,
 }
-

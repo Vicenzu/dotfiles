@@ -49,8 +49,9 @@ vim.keymap.set("n", "<leader>pa", function()
 	local path = vim.fn.expand("%:p")
 	vim.fn.setreg("+", path)
 	print("path:", path)
-end)
-
+end,
+  { desc = "Copy Full File-Path" }
+)
 -- Indenting
 vim.keymap.set("v", "<", "<gv", { silent = true, noremap = true })
 vim.keymap.set("v", ">", ">gv", { silent = true, noremap = true })
@@ -65,4 +66,30 @@ else
 	api.nvim_set_keymap("n", "<C-/>", "gtc", { noremap = false })
 	api.nvim_set_keymap("v", "<C-/>", "goc", { noremap = false })
 end
+
+
+-- Markdown To Pdf (Latex format)
+vim.api.nvim_create_user_command("MakePDF", function()
+  local input = vim.fn.expand("%:p")        -- percorso assoluto del file corrente
+  local output = vim.fn.expand("%:r") .. ".pdf" 
+  local cmd = {
+    "pandoc", input,
+    "-o", output,
+    "--pdf-engine=xelatex"
+  }
+
+  vim.fn.jobstart(cmd, {
+    on_exit = function(_, code)
+      if code == 0 then
+        print("PDF generato: " .. output)
+      else
+        print("Errore: conversione fallita")
+      end
+    end,
+  })
+end, {})
+
+vim.keymap.set("n", "<leader>cl", ":MakePDF<CR>", {
+  desc = "Convert Markdown to PDF (Pandoc XeLaTeX)"
+})
 
