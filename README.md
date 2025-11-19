@@ -51,12 +51,28 @@ These dotfiles include configuration for my daily setup:
 
 ---
 
-## ⚙️ Usage (with GNU Stow)
+## ⚙️ Usage 
 
+### GNU Stow
 Clone the repo into your home directory:
 ```bash
 git clone https://github.com/vinzz/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
+```
+### Pandoc & TexLive
+Install packages
+
+```bash
+sudo pacman -S pandoc texlive-core texlive-latexextra texlive-langitalian
+    texlive-latexrecommended texlive-fontsrecommended texlive-xetex
+```
+
+texlive-xetex (optional) – newer pdf-engine
+
+Standard Pandoc use:
+
+```bash
+pandoc <inputFile> -o <outputFile>.<desiredFileType>
 ```
 
 ## ⚠️ IMPORTANT -- .config folder

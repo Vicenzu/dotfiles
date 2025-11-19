@@ -75,8 +75,9 @@ vim.api.nvim_create_user_command("MakePDF", function()
 		"-o",
 		output,
 		"--pdf-engine=xelatex",
-		"-V geometry:margin=1cm",
-	}
+    "-V",
+    "geometry:margin=2.5cm",
+  }
 
 	vim.fn.jobstart(cmd, {
 		on_exit = function(_, code)
