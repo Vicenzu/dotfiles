@@ -146,6 +146,6 @@ alias dots='cd ~/dotfiles'
 alias dotsync='cd ~/dotfiles && git add . && git commit -m "update dotfiles" && git push'
 alias dotpull='cd ~/dotfiles && git pull && stow -R .'
 alias algs='cd ~/Documents/Algorythms/'
-alias algssync='cd ~/Documents/Algorythms/ && git add . && git commit -m "update dotfiles" && git push '
+alias algssync='cd ~/Documents/Algorythms/ && git add . && git commit -m "update Algorythms" && git push '
 
 alias uni='cd ~/Documents/Uni/'
