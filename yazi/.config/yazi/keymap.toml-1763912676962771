@@ -1,0 +1,13 @@
+[manager]
+unbind = [
+  "<Up>",
+  "<Down>",
+  "<Left>",
+  "<Right>"
+]
+keymap = [
+  { on = "h", run = "leave" },
+  { on = "j", run = "cursor_down" },
+  { on = "k", run = "cursor_up" },
+  { on = "l", run = "enter" }
+]

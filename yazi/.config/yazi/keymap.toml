@@ -1,0 +1,18 @@
+# Disabilita le frecce ma lascia tutte le keybind di default (q, j, k, ecc.)
+
+[[mgr.prepend_keymap]]
+on  = "<Up>"
+run = "noop"
+
+[[mgr.prepend_keymap]]
+on  = "<Down>"
+run = "noop"
+
+[[mgr.prepend_keymap]]
+on  = "<Left>"
+run = "noop"
+
+[[mgr.prepend_keymap]]
+on  = "<Right>"
+run = "noop"
+

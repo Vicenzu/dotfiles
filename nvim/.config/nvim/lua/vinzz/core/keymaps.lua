@@ -1,5 +1,13 @@
 local mapkey = require("vinzz.utils.keymapper").mapvimkey
 
+-- Disable arrow keys for moving
+vim.keymap.set('', '<Up>', '<Nop>')
+vim.keymap.set('', '<Down>', '<Nop>')
+vim.keymap.set('', '<Left>', '<Nop>')
+vim.keymap.set('', '<Right>', '<Nop>')
+
+vim.keymap.set('i', 'jj', '<Esc>', {desc = "Exit insert mode"})
+
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 

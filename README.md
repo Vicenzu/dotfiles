@@ -20,25 +20,37 @@ These dotfiles include configuration for my daily setup:
 
 ~/.dotfiles/
 
+├── backgrounds/ -> wallpapers
+
 ├── zsh/ → .zshrc, .p10k.zsh, .shell.pre-oh-my-zsh
 
 ├── git/ → .gitconfig
 
-├── config/ → user-level configs under .config/
+├── nvim/
 
-│ └── .config/
+├── kitty/
 
-│ ├── nvim/
+├── fastfetch/
 
-│ ├── kitty/
+├── wofi/ -> 3 different configs (wofi2 default config) 
 
-│ ├── fastfetch/
+├── btop/
 
-│ ├── wofi/
+├── lazygit/
 
-│ ├── btop/
+├── ghostty/
 
-│ └── lazygit/
+├── hyprlock/
+
+├── hyprmocha/
+
+├── hyprpaper/
+
+├── waybar/
+
+├── tmux/
+
+├── yazi/
 
 ├── scripts/ → custom shell scripts
 
@@ -59,6 +71,13 @@ Clone the repo into your home directory:
 git clone https://github.com/vinzz/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
 ```
+
+## 🧹 Unstow (remove symlinks)
+```bash
+stow -D zsh
+stow -D -t ~/.config .config
+```
+
 ### Pandoc & TexLive
 Install packages
 
@@ -73,23 +92,6 @@ Standard Pandoc use:
 
 ```bash
 pandoc <inputFile> -o <outputFile>.<desiredFileType>
-```
-
-## ⚠️ IMPORTANT -- .config folder
-
-Do **not** run `stow .config` directly! (It will create the links in your home directory instead of ~/.config.)
-
-Run `stow -t ~/.config .config` instead
-
-### If you ever move things around, use:
-`stow -R -t ~/.config .config`
-
-to restow and refresh all the symlinks safely.
-
-## 🧹 Unstow (remove symlinks)
-```bash
-stow -D zsh
-stow -D -t ~/.config .config
 ```
 
 ## 🧠 Notes
