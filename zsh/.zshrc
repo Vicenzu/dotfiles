@@ -151,3 +151,10 @@ alias algs='cd ~/Documents/Algorythms/'
 alias algssync='cd ~/Documents/Algorythms/ && git add . && git commit -m "update Algorythms" && git push '
 
 alias uni='cd ~/Documents/Uni/'
+alias lg='lazygit'
+
+#Fast Node Manager (needed for npm - node package manager)
+eval "$(fnm env --use-on-cd)"
+
+# Set up fzf key bindings and fuzzy completion
+source <(fzf --zsh)
