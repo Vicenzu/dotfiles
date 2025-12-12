@@ -152,7 +152,7 @@ alias algssync='cd ~/Documents/Algorythms/ && git add . && git commit -m "update
 
 alias uni='cd ~/Documents/Uni/'
 alias lg='lazygit'
-
+alias fpg='flutter clean & flutter pub get'
 #Fast Node Manager (needed for npm - node package manager)
 eval "$(fnm env --use-on-cd)"
 
