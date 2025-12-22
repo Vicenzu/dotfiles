@@ -17,10 +17,13 @@ paru -Syu
 
 print_header "PULIZIA CACHE PACCHETTI (PACMAN)"
 
+# Rimuovo preventivamente eventuali residui di download corrotti
+sudo rm -rf /var/cache/pacman/pkg/download-* 2>/dev/null
+
 numPkg=$(sudo ls /var/cache/pacman/pkg/ | wc -l)
 
 if [ $numPkg -gt 0 ]; then 
-  echo "$numPkg"
+  echo "NUMERO PACCHETTI: $numPkg"
   echo "ECCO LO SPAZIO CHE OCCUPANO: $(du -sh /var/cache/pacman/pkg/)"
   echo "PROCEDO A LIBERARE LA CACHE"
   # paccache -r mantiene di default le ultime 3 versioni (sicurezza).
