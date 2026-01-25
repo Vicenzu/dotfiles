@@ -11,9 +11,10 @@ print_header() {
 
 print_header "INIZIO LA PULIZIA DEL SISTEMA"
 
-print_header "AGGIORNO IL SISTEMA (PACMAN & AUR)"
+print_header "AGGIORNO IL SISTEMA (PACMAN & AUR & FLATPAK)"
 
 paru -Syu
+flatpak update
 
 print_header "PULIZIA CACHE PACCHETTI (PACMAN)"
 

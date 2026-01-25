@@ -754,3 +754,4 @@ exts = [
   { name = "liquid", text = "", fg = "#a6e3a1" },
   { name = "zip", text = "", fg = "#fab387" },
 ]
+
