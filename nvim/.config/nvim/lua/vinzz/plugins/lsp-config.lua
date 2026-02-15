@@ -26,6 +26,7 @@ return {
 					"omnisharp",
 					"basedpyright",
 					"jdtls",
+					"intelephense",
 					"clangd",
 				},
 			})
@@ -64,8 +65,7 @@ return {
 			vim.api.nvim_create_autocmd("LspAttach", {
 				group = vim.api.nvim_create_augroup("LspKeymaps", {}),
 				callback = function(ev)
-
-          -- map func for keymaps
+					-- map func for keymaps
 					local function map(mode, lhs, rhs, desc)
 						vim.keymap.set(mode, lhs, rhs, {
 							buffer = ev.buf,
@@ -103,6 +103,43 @@ return {
 							typeCheckingMode = "basic",
 							autoSearchPaths = true,
 							useLibraryCodeForTypes = true,
+						},
+					},
+				},
+			})
+
+			--------------------------------------------------------------------
+			-- PHP
+			--------------------------------------------------------------------
+			vim.lsp.config("intelephense", {
+				capabilities = capabilities,
+				settings = {
+					intelephense = {
+						-- Aumenta la memoria per file grandi
+						files = { maxSize = 5000000 },
+						-- Questo dice all'LSP quali funzioni esistono (es. WordPress, MySQL, ecc.)
+						stubs = {
+							"bcmath",
+							"date",
+							"filter",
+							"hash",
+							"iconv",
+							"json",
+							"mbstring",
+							"mysqli",
+							"mysql",
+							"openssl",
+							"pcre",
+							"PDO",
+							"pdo_mysql",
+							"readline",
+							"session",
+							"standard",
+							"superglobals",
+							"tokenizer",
+							"xml",
+							"zip",
+							"zlib",
 						},
 					},
 				},
@@ -247,11 +284,7 @@ return {
 						connections = {
 							{
 								driver = "mysql",
-								dataSourceName = "giuseppec:NuovaPasswordSicura!@tcp(127.0.0.1:3306)/prova",
-							},
-							{
-								driver = "sqlite3",
-								filename = "/home/giuseppec/databases/provas.db",
+								dataSourceName = "SQLi_user:password_segreta@tcp(127.0.0.1:3306)/SQLi_db",
 							},
 						},
 					},
@@ -310,6 +343,7 @@ return {
 				"basedpyright",
 				"clangd",
 				"omnisharp",
+        "intelephense"
 			})
 		end,
 	},

@@ -116,6 +116,7 @@ alias ff='fastfetch'
 alias uni='cd ~/Documents/Uni/'
 alias lg='lazygit'
 alias tt='tmux'
+alias pi='ssh vinzz@100.125.164.15'
 
 #Fast Node Manager (needed for npm - node package manager)
 eval "$(fnm env --use-on-cd)"
