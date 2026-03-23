@@ -88,7 +88,7 @@ export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
 export PATH=$PATH:$ANDROID_HOME/platform-tools
 
 # Java JDK (OpenJDK 21)
-export JAVA_HOME=/usr/lib/jvm/java-21-openjdk
+export JAVA_HOME=/usr/lib/jvm/java-26-openjdk
 export PATH=$JAVA_HOME/bin:$PATH
 
 
