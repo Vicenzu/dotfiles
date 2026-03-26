@@ -60,39 +60,6 @@ return {
 			})
 
 			--------------------------------------------------------------------
-			-- ON_ATTACH (keymaps quando un LSP si attacca al buffer)
-			--------------------------------------------------------------------
-			vim.api.nvim_create_autocmd("LspAttach", {
-				group = vim.api.nvim_create_augroup("LspKeymaps", {}),
-				callback = function(ev)
-					-- map func for keymaps
-					local function map(mode, lhs, rhs, desc)
-						vim.keymap.set(mode, lhs, rhs, {
-							buffer = ev.buf,
-							silent = true,
-							desc = desc,
-						})
-					end
-
-					map("n", "K", vim.lsp.buf.hover, "Hover")
-					map("n", "gd", vim.lsp.buf.definition, "Go to definition")
-					map("n", "gD", vim.lsp.buf.declaration, "Go to declaration")
-
-					map("n", "gi", "<cmd>Telescope lsp_implementations<CR>", "Implementations")
-					map("n", "gt", "<cmd>Telescope lsp_type_definitions<CR>", "Type Definitions")
-					map("n", "gR", "<cmd>Telescope lsp_references<CR>", "References")
-
-					map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, "Code Action")
-					map("n", "<leader>rn", vim.lsp.buf.rename, "Rename under Cursor")
-
-					map("n", "<leader>d", vim.diagnostic.open_float, "Inline Diagnostic")
-					map("n", "<leader>D", "<cmd>Telescope diagnostics bufnr=0<CR>", "Buffer Diagnostic")
-
-					map("n", "<leader>rs", "<cmd>LspRestart<CR>", "Riavvia LSP")
-				end,
-			})
-
-			--------------------------------------------------------------------
 			-- PYTHON LS
 			--------------------------------------------------------------------
 			vim.lsp.config("basedpyright", {

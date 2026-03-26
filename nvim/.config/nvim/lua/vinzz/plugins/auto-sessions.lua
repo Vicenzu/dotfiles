@@ -8,8 +8,5 @@ return {
             auto_session_suppress_dirs = { "~/", "~/Dev/", "~/Scaricati/", "~/Scrivania/", "~/Documents/" },
         })
 
-        --bindings for manual autosession
-        vim.keymap.set("n", "<leader>wr", "<cmd>SessionRestore<CR>", { desc = "Restore session for cmd"}) -- restore last workspace session for current
-        vim.keymap.set("n", "<leader>ws", "<cmd>SessionSave<CR>", { desc = "Save session for auto session root dir"}) -- save workspace session for current
     end
 }

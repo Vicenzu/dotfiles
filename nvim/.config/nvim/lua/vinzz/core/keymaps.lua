@@ -1,218 +1,292 @@
-local mapkey = require("vinzz.utils.keymapper").mapvimkey
+local map = vim.keymap.set
 
--- Disable arrow keys for moving
-vim.keymap.set('', '<Up>', '<Nop>')
-vim.keymap.set('', '<Down>', '<Nop>')
-vim.keymap.set('', '<Left>', '<Nop>')
-vim.keymap.set('', '<Right>', '<Nop>')
-
-vim.keymap.set('i', 'jj', '<Esc>', {desc = "Exit insert mode"})
+-- =============================================================================
+-- CORE
+-- =============================================================================
 
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
--- nvim-java commands shorcuts
-mapkey("<leader>jr", "JavaRunnerRunMain", "n") -- Runs the application or selected main class (if there are multiple main classes)
-mapkey("<leader>js", "JavaRunnerStopMain", "n") -- Stops the running application
-mapkey("<leader>jtl", "JavaRunnerToggleLogs", "n") -- Toggle between show & hide runner log window 
+map("i", "jj", "<Esc>", { desc = "Exit insert mode" })
 
-mapkey("<leader>jb", "JavaBuildBuildWorkspace", "n") -- Runs a full workspace build 
-mapkey("<leader>jb", "JavaBuildCleanWorkspace", "n") -- Clear the workspace cache (for now you have to close and reopen to restart the language server after the deletion)
+map("v", "<", "<gv", { silent = true, noremap = true })
+map("v", ">", ">gv", { silent = true, noremap = true })
 
--- Buffer Navigation
-mapkey("<leader>bn", "bnext", "n") -- Next buffer
-mapkey("<leader>bp", "bprevious", "n") -- Prev buffer
-mapkey("<leader>bb", "e #", "n") -- Switch to Other Buffer
-mapkey("<leader>`", "e #", "n") -- Switch to Other Buffer
+map("n", "<leader>pa", function()
+    local path = vim.fn.expand("%:p")
+    vim.fn.setreg("+", path)
+    print("path:", path)
+end, { desc = "Copy full file path" })
 
--- Directory Navigation
-mapkey("<leader><Tab>", ":Neotree filesystem reveal left<CR>", "n")
-
--- Fuzzy Finder Navigation
-mapkey("<leader>ff", "FzfLua files", "n")
-mapkey("<leader>fg", "FzfLua grep_project", "n")
-mapkey("<leader>fb", "FzfLua buffers", "n")
-mapkey("<leader>fg", "FzfLua grep_project", "n")
-mapkey("<leader>fx", "FzfLua diagnostics_document", "n")
-mapkey("<leader>fX", "FzfLua diagnostics_workspace", "n")
-mapkey("<leader>fc", "FzfLua git_bcommits", "n")
-mapkey("<leader>fl", "FzfLua lsp_references", "n")
-
--- Pane and Window Navigation
-mapkey("<C-h>", "<C-w>h", "n") -- Navigate Left
-mapkey("<C-j>", "<C-w>j", "n") -- Navigate Down
-mapkey("<C-k>", "<C-w>k", "n") -- Navigate Up
-mapkey("<C-l>", "<C-w>l", "n") -- Navigate Right
-mapkey("<C-h>", "wincmd h", "t") -- Navigate Left
-mapkey("<C-j>", "wincmd j", "t") -- Navigate Down
-mapkey("<C-k>", "wincmd k", "t") -- Navigate Up
-mapkey("<C-l>", "wincmd l", "t") -- Navigate Right
-mapkey("<C-h>", "TmuxNavigateLeft", "n") -- Navigate Left
-mapkey("<C-j>", "TmuxNavigateDown", "n") -- Navigate Down
-mapkey("<C-k>", "TmuxNavigateUp", "n") -- Navigate Up
-mapkey("<C-l>", "TmuxNavigateRight", "n") -- Navigate Right
-
--- Window Management
-mapkey("<leader>sv", "vsplit", "n") -- Split Vertically
-mapkey("<leader>sh", "split", "n") -- Split Horizontally
-mapkey("<C-Up>", "resize +2", "n")
-mapkey("<C-Down>", "resize -2", "n")
-mapkey("<C-Left>", "vertical resize +2", "n")
-mapkey("<C-Right>", "vertical resize -2", "n")
-
--- Copy Full File-Path
-vim.keymap.set("n", "<leader>pa", function()
-	local path = vim.fn.expand("%:p")
-	vim.fn.setreg("+", path)
-	print("path:", path)
-end, { desc = "Copy Full File-Path" })
--- Indenting
-vim.keymap.set("v", "<", "<gv", { silent = true, noremap = true })
-vim.keymap.set("v", ">", ">gv", { silent = true, noremap = true })
-
-local api = vim.api
-
--- Comments
 if vim.env.TMUX ~= nil then
-	api.nvim_set_keymap("n", "<C-_>", "gtc", { noremap = false })
-	api.nvim_set_keymap("v", "<C-_>", "goc", { noremap = false })
+    map("n", "<C-_>", "gtc", { noremap = false, desc = "Comment line (tmux)" })
+    map("v", "<C-_>", "goc", { noremap = false, desc = "Comment selection (tmux)" })
 else
-	api.nvim_set_keymap("n", "<C-/>", "gtc", { noremap = false })
-	api.nvim_set_keymap("v", "<C-/>", "goc", { noremap = false })
+    map("n", "<C-/>", "gtc", { noremap = false, desc = "Comment line" })
+    map("v", "<C-/>", "goc", { noremap = false, desc = "Comment selection" })
 end
 
--- Markdown To Pdf (Latex format)
--- vim.api.nvim_create_user_command("MakePDF", function()
--- 	local input = vim.fn.expand("%:p") -- percorso assoluto del file corrente
--- 	local output = vim.fn.expand("%:r") .. ".pdf"
--- 	local cmd = {
--- 		"pandoc",
--- 		input,
--- 		"-o",
--- 		output,
--- 		"--pdf-engine=xelatex",
---     "-V",
---     "geometry:margin=2.5cm",
---   }
---
--- 	vim.fn.jobstart(cmd, {
--- 		on_exit = function(_, code)
--- 			if code == 0 then
--- 				print("PDF generato: " .. output)
--- 			else
--- 				print("Errore: conversione fallita")
--- 			end
--- 		end,
--- 	})
--- end, {})
---
--- vim.keymap.set("n", "<leader>cl", ":MakePDF<CR>", {
--- 	desc = "Convert Markdown to PDF (Pandoc XeLaTeX)",
--- })
-vim.api.nvim_create_user_command("MakePDF", function()
-	-- 1. Definiamo il preambolo LaTeX (i tuoi pacchetti e stili)
-	local latex_preamble = [[
-% Pacchetti essenziali
-\usepackage{xcolor}
-\usepackage{listings}
-\usepackage{graphicx}
-\usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage{mathrsfs}
-\usepackage{float}
-\usepackage{cancel}
-\usepackage[figurename=Figura]{caption}
+-- =============================================================================
+-- WINDOW / SPLITS
+-- =============================================================================
 
-% Definizione colori personalizzati (Abbellimento)
-\definecolor{codegreen}{rgb}{0,0.6,0}
-\definecolor{codegray}{rgb}{0.5,0.5,0.5}
-\definecolor{codepurple}{rgb}{0.58,0,0.82}
-\definecolor{backcolour}{rgb}{0.96,0.96,0.96} % Grigio molto chiaro per lo sfondo
+map("n", "<leader>sv", "<cmd>vsplit<CR>",            { desc = "Split vertical" })
+map("n", "<leader>sh", "<cmd>split<CR>",             { desc = "Split horizontal" })
+map("n", "<leader>sm", "<cmd>MaximizerToggle<CR>",   { desc = "Maximize/minimize split" })
 
-% Definizione manuale VHDL (La tua configurazione originale)
-\lstdefinelanguage{VHDL}{
-  morekeywords={
-    architecture,begin,case,component,configuration,
-    constant,else,elsif,end,entity,file,for,function,
-    generate,if,in,inout,is,label,library,linkage,
-    loop,map,new,of,on,open,others,out,package,
-    port,process,range,record,report,return,select,
-    signal,severity,subtype,then,to,type,use,variable,
-    wait,when,while,with,downto
-  },
-  sensitive=false,
-  morecomment=[l]--,
-  morecomment=[s]{/*}{*/},
-  morestring=[b]",
-}
+map("n", "<C-Up>",    "<cmd>resize +2<CR>",          { desc = "Resize up" })
+map("n", "<C-Down>",  "<cmd>resize -2<CR>",          { desc = "Resize down" })
+map("n", "<C-Left>",  "<cmd>vertical resize +2<CR>", { desc = "Resize left" })
+map("n", "<C-Right>", "<cmd>vertical resize -2<CR>", { desc = "Resize right" })
 
-% Stile globale per TUTTI i linguaggi
-\lstset{
-  backgroundcolor=\color{backcolour},   % Sfondo colorato
-  commentstyle=\color{codegreen},       % Commenti verdi
-  keywordstyle=\color{blue}\bfseries,   % Keyword blu grassetto
-  numberstyle=\tiny\color{codegray},    % Numeri di riga grigi piccoli
-  stringstyle=\color{orange!60!black},  % Stringhe arancioni scure
-  basicstyle=\ttfamily\footnotesize,    % Font monospaziato
-  breakatwhitespace=false,
-  breaklines=true,                 % A capo automatico
-  captionpos=b,                    % Caption sotto il codice
-  keepspaces=true,
-  numbers=left,                    % Numeri a sinistra
-  numbersep=5pt,
-  showspaces=false,
-  showstringspaces=false,
-  showtabs=false,
-  stepnumber=1,
-  tabsize=2,
-  frame=lines,                     % Linea sopra e sotto (elegante)
-  rulecolor=\color{black!30},      % Colore delle linee del frame
-}
-]]
+-- Pane navigation (tmux-aware, vim-tmux-navigator gestisce i conflitti)
+map("n", "<C-h>", "<cmd>TmuxNavigateLeft<CR>",  { desc = "Navigate left" })
+map("n", "<C-j>", "<cmd>TmuxNavigateDown<CR>",  { desc = "Navigate down" })
+map("n", "<C-k>", "<cmd>TmuxNavigateUp<CR>",    { desc = "Navigate up" })
+map("n", "<C-l>", "<cmd>TmuxNavigateRight<CR>", { desc = "Navigate right" })
 
-	-- 2. Scriviamo questo preambolo in un file temporaneo nella cache di Neovim
-	local preamble_path = vim.fn.stdpath("cache") .. "/custom_preamble.tex"
-	local file = io.open(preamble_path, "w")
-	if file then
-		file:write(latex_preamble)
-		file:close()
-	else
-		print("Errore: Impossibile creare il file di preambolo")
-		return
-	end
+map("t", "<C-h>", "<cmd>wincmd h<CR>", { desc = "Navigate left (term)" })
+map("t", "<C-j>", "<cmd>wincmd j<CR>", { desc = "Navigate down (term)" })
+map("t", "<C-k>", "<cmd>wincmd k<CR>", { desc = "Navigate up (term)" })
+map("t", "<C-l>", "<cmd>wincmd l<CR>", { desc = "Navigate right (term)" })
 
-	-- 3. Configurazione Pandoc
-  local current_file_dir = vim.fn.expand("%:p:h") -- La cartella dove si trova il file .md
-	local input = vim.fn.expand("%:t")
-	local output = vim.fn.expand("%:t:r") .. ".pdf"
+-- =============================================================================
+-- BUFFER NAVIGATION
+-- =============================================================================
 
-	local cmd = {
-		"pandoc",
-		input,
-		"-o", output,
-		"--pdf-engine=xelatex",
-		"--listings",                -- FONDAMENTALE: Dice a Pandoc di usare il pacchetto listings
-		"-H", preamble_path,         -- Include il nostro file di stile nell'header
-    "--resource-path=.",     -- Dice a pandoc di cercare le immagini nella cartella corrente
-		"-V", "geometry:margin=2.5cm",
-		"-V", "papersize=a4",
-        "-V", "lang=it",             -- Imposta la lingua del documento (opzionale)
-	}
+map("n", "<leader>bn", "<cmd>bnext<CR>",     { desc = "Next buffer" })
+map("n", "<leader>bp", "<cmd>bprevious<CR>", { desc = "Prev buffer" })
+map("n", "<leader>bb", "<cmd>e #<CR>",       { desc = "Alternate buffer" })
+map("n", "<leader>`",  "<cmd>e #<CR>",       { desc = "Alternate buffer" })
 
-	-- 4. Esecuzione del comando
-	print("Generazione PDF in corso...")
-	vim.fn.jobstart(cmd, {
-    cwd = current_file_dir,
-		on_exit = function(_, code)
-			if code == 0 then
-				print("✅ PDF generato con successo: " .. output)
-			else
-				print("❌ Errore nella conversione. Controlla la sintassi LaTeX.")
-			end
-		end,
-	})
-end, {})
--- Keymap
-vim.keymap.set("n", "<leader>cl", ":MakePDF<CR>", {
-	desc = "Convert Markdown to PDF (Custom LaTeX Style)",
+-- =============================================================================
+-- BARBAR
+-- =============================================================================
+
+map("n", "<A-,>",   "<cmd>BufferPrevious<CR>",             { desc = "Buffer: prev" })
+map("n", "<A-.>",   "<cmd>BufferNext<CR>",                 { desc = "Buffer: next" })
+map("n", "<A-<>",   "<cmd>BufferMovePrevious<CR>",         { desc = "Buffer: move prev" })
+map("n", "<A->>",   "<cmd>BufferMoveNext<CR>",             { desc = "Buffer: move next" })
+map("n", "<A-1>",   "<cmd>BufferGoto 1<CR>",               { desc = "Buffer: goto 1" })
+map("n", "<A-2>",   "<cmd>BufferGoto 2<CR>",               { desc = "Buffer: goto 2" })
+map("n", "<A-3>",   "<cmd>BufferGoto 3<CR>",               { desc = "Buffer: goto 3" })
+map("n", "<A-4>",   "<cmd>BufferGoto 4<CR>",               { desc = "Buffer: goto 4" })
+map("n", "<A-5>",   "<cmd>BufferGoto 5<CR>",               { desc = "Buffer: goto 5" })
+map("n", "<A-6>",   "<cmd>BufferGoto 6<CR>",               { desc = "Buffer: goto 6" })
+map("n", "<A-7>",   "<cmd>BufferGoto 7<CR>",               { desc = "Buffer: goto 7" })
+map("n", "<A-8>",   "<cmd>BufferGoto 8<CR>",               { desc = "Buffer: goto 8" })
+map("n", "<A-9>",   "<cmd>BufferGoto 9<CR>",               { desc = "Buffer: goto 9" })
+map("n", "<A-0>",   "<cmd>BufferLast<CR>",                 { desc = "Buffer: last" })
+map("n", "<A-p>",   "<cmd>BufferPin<CR>",                  { desc = "Buffer: pin" })
+map("n", "<A-c>",   "<cmd>BufferClose<CR>",                { desc = "Buffer: close" })
+map("n", "<C-p>",   "<cmd>BufferPick<CR>",                 { desc = "Buffer: pick" })
+map("n", "<Space>bb", "<cmd>BufferOrderByBufferNumber<CR>",{ desc = "Buffer: order by number" })
+map("n", "<Space>bn", "<cmd>BufferOrderByName<CR>",        { desc = "Buffer: order by name" })
+map("n", "<Space>bd", "<cmd>BufferOrderByDirectory<CR>",   { desc = "Buffer: order by dir" })
+map("n", "<Space>bl", "<cmd>BufferOrderByLanguage<CR>",    { desc = "Buffer: order by lang" })
+map("n", "<Space>bw", "<cmd>BufferOrderByWindowNumber<CR>",{ desc = "Buffer: order by window" })
+
+-- =============================================================================
+-- FILE TREE
+-- =============================================================================
+
+map("n", "<leader><Tab>", "<cmd>Neotree filesystem reveal left<CR>", { desc = "Neotree toggle" })
+
+-- =============================================================================
+-- TELESCOPE
+-- =============================================================================
+
+map("n", "<leader>ff",  "<cmd>Telescope find_files<CR>",  { desc = "Telescope: files" })
+map("n", "<leader>fg",  "<cmd>Telescope live_grep<CR>",   { desc = "Telescope: grep" })
+map("n", "<leader>fb",  "<cmd>Telescope buffers<CR>",     { desc = "Telescope: buffers" })
+map("n", "<leader>fk",  "<cmd>Telescope keymaps<CR>",     { desc = "Telescope: keymaps" })
+map("n", "<leader>fh",  "<cmd>Telescope help_tags<CR>",   { desc = "Telescope: help" })
+map("n", "<leader>fa",  "<cmd>Telescope<CR>",             { desc = "Telescope: all" })
+map("n", "<leader>fx",  "<cmd>Telescope diagnostics bufnr=0<CR>", { desc = "Telescope: doc diagnostics" })
+map("n", "<leader>fX",  "<cmd>Telescope diagnostics<CR>",         { desc = "Telescope: ws diagnostics" })
+map("n", "<leader>fc",  "<cmd>Telescope git_bcommits<CR>",        { desc = "Telescope: git commits" })
+map("n", "<leader>fl",  "<cmd>Telescope lsp_references<CR>",      { desc = "Telescope: LSP refs" })
+map("n", "<leader>pr",  "<cmd>Telescope oldfiles<CR>",            { desc = "Telescope: recent files" })
+map("n", "<leader>ths", "<cmd>Telescope themes<CR>",              { desc = "Telescope: themes" })
+map("n", "<leader>pWs", function()
+    require("telescope.builtin").grep_string({ search = vim.fn.expand("<cWORD>") })
+end, { desc = "Telescope: grep WORD" })
+
+-- =============================================================================
+-- SNACKS PICKER
+-- =============================================================================
+
+map({ "n", "x" }, "<leader>pws", function() require("snacks").picker.grep_word() end,                      { desc = "Snacks: grep word" })
+map("n",           "<leader>pk",  function() require("snacks").picker.keymaps({ layout = "ivy" }) end,     { desc = "Snacks: keymaps" })
+map("n",           "<leader>gbr", function() require("snacks").picker.git_branches({ layout = "select" }) end, { desc = "Snacks: git branches" })
+map("n",           "<leader>th",  function() require("snacks").picker.colorschemes({ layout = "ivy" }) end,{ desc = "Snacks: colorschemes" })
+map("n",           "<leader>vh",  function() require("snacks").picker.help() end,                          { desc = "Snacks: help" })
+map("n",           "<leader>pt",  function() require("snacks").picker.todo_comments() end,                 { desc = "Snacks: todos" })
+
+-- =============================================================================
+-- SNACKS WORKFLOW
+-- =============================================================================
+
+map("n", "<leader>lg", function() require("snacks").lazygit() end,            { desc = "Lazygit" })
+map("n", "<leader>gl", function() require("snacks").lazygit.log() end,        { desc = "Lazygit log" })
+map("n", "<leader>rN", function() require("snacks").rename.rename_file() end, { desc = "Rename file" })
+map("n", "<leader>dB", function() require("snacks").bufdelete() end,          { desc = "Delete buffer" })
+
+-- =============================================================================
+-- Keymaps che richiedono plugin (caricati dopo lazy.nvim)
+-- =============================================================================
+
+vim.api.nvim_create_autocmd("User", {
+    pattern = "VeryLazy",
+    callback = function()
+
+        -- HARPOON
+        local harpoon = require("harpoon")
+        map("n", "<leader>ha", function() harpoon:list():add() end,                         { desc = "Harpoon: add" })
+        map("n", "<C-e>",      function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, { desc = "Harpoon: menu" })
+        map("n", "<C-y>",      function() harpoon:list():select(1) end,                     { desc = "Harpoon: file 1" })
+        map("n", "<C-i>",      function() harpoon:list():select(2) end,                     { desc = "Harpoon: file 2" })
+        map("n", "<C-n>",      function() harpoon:list():select(3) end,                     { desc = "Harpoon: file 3" })
+        map("n", "<C-s>",      function() harpoon:list():select(4) end,                     { desc = "Harpoon: file 4" })
+        map("n", "<C-S-P>",    function() harpoon:list():prev() end,                        { desc = "Harpoon: prev" })
+        map("n", "<C-S-N>",    function() harpoon:list():next() end,                        { desc = "Harpoon: next" })
+
+        -- GIT SIGNS
+        map("n", "]h",          function() require("gitsigns").next_hunk() end,  { desc = "Gitsigns: next hunk" })
+        map("n", "[h",          function() require("gitsigns").prev_hunk() end,  { desc = "Gitsigns: prev hunk" })
+        map("n", "<leader>hs",  function() require("gitsigns").stage_hunk() end, { desc = "Gitsigns: stage hunk" })
+        map("n", "<leader>hr",  function() require("gitsigns").reset_hunk() end, { desc = "Gitsigns: reset hunk" })
+        map("n", "<leader>hb",  function() require("gitsigns").blame_line() end, { desc = "Gitsigns: blame line" })
+        map("n", "<leader>hd",  function() require("gitsigns").diffthis() end,   { desc = "Gitsigns: diff" })
+
+        -- TODO COMMENTS
+        map("n", "]t", function() require("todo-comments").jump_next() end, { desc = "Todo: next" })
+        map("n", "[t", function() require("todo-comments").jump_prev() end,  { desc = "Todo: prev" })
+
+        -- MINI
+        map("n", "<leader>cw",    function() require("mini.trailspace").trim() end,  { desc = "Trim whitespace" })
+        map({ "n", "x" }, "sj",   function() require("mini.splitjoin").join() end,   { desc = "Join args" })
+        map({ "n", "x" }, "sk",   function() require("mini.splitjoin").split() end,  { desc = "Split args" })
+
+        -- EMMET
+        map({ "n", "v" }, "<leader>xe", function() require("nvim-emmet").wrap_with_abbreviation() end, { desc = "Emmet wrap" })
+
+        -- UFO FOLDING
+        map("n", "zR", function() require("ufo").openAllFolds() end,  { desc = "Open all folds" })
+        map("n", "zM", function() require("ufo").closeAllFolds() end, { desc = "Close all folds" })
+
+    end,
 })
+
+-- =============================================================================
+-- LSP
+-- =============================================================================
+
+vim.api.nvim_create_autocmd("LspAttach", {
+    group = vim.api.nvim_create_augroup("LspKeymaps", { clear = true }),
+    callback = function(ev)
+        local function lmap(mode, lhs, rhs, desc)
+            vim.keymap.set(mode, lhs, rhs, { buffer = ev.buf, silent = true, desc = desc })
+        end
+
+        lmap("n",           "K",           vim.lsp.buf.hover,                        "LSP: hover")
+        lmap("n",           "gd",          vim.lsp.buf.definition,                   "LSP: definition")
+        lmap("n",           "gD",          vim.lsp.buf.declaration,                  "LSP: declaration")
+        lmap("n",           "gi",          "<cmd>Telescope lsp_implementations<CR>", "LSP: implementations")
+        lmap("n",           "gt",          "<cmd>Telescope lsp_type_definitions<CR>","LSP: type definitions")
+        lmap("n",           "gR",          "<cmd>Telescope lsp_references<CR>",      "LSP: references")
+        lmap({ "n", "v" },  "<leader>ca",  vim.lsp.buf.code_action,                  "LSP: code action")
+        lmap("n",           "<leader>rn",  vim.lsp.buf.rename,                       "LSP: rename")
+        lmap("n",           "<leader>d",   vim.diagnostic.open_float,                "LSP: inline diagnostic")
+        lmap("n",           "<leader>D",   "<cmd>Telescope diagnostics bufnr=0<CR>", "LSP: buffer diagnostics")
+        lmap("n",           "<leader>rs",  "<cmd>LspRestart<CR>",                    "LSP: restart")
+    end,
+})
+
+-- =============================================================================
+-- FORMATTING & LINTING
+-- =============================================================================
+
+map({ "n", "v" }, "<leader>mp", function()
+    require("conform").format({ lsp_fallback = true, async = false, timeout_ms = 1000 })
+end, { desc = "Format (conform)" })
+
+map("n", "<leader>gf", function()
+    vim.lsp.buf.format({ async = false })
+end, { desc = "Format (LSP)" })
+
+map("n", "<leader>li", function()
+    require("lint").try_lint()
+end, { desc = "Run linter" })
+
+-- =============================================================================
+-- TROUBLE
+-- =============================================================================
+
+map("n", "<leader>xw", "<cmd>Trouble diagnostics toggle<CR>",              { desc = "Trouble: workspace" })
+map("n", "<leader>xd", "<cmd>Trouble diagnostics toggle filter.buf=0<CR>", { desc = "Trouble: document" })
+map("n", "<leader>xq", "<cmd>Trouble quickfix toggle<CR>",                 { desc = "Trouble: quickfix" })
+map("n", "<leader>xl", "<cmd>Trouble loclist toggle<CR>",                  { desc = "Trouble: loclist" })
+map("n", "<leader>xt", "<cmd>Trouble todo toggle<CR>",                     { desc = "Trouble: todos" })
+
+-- =============================================================================
+-- CODE RUNNING
+-- =============================================================================
+
+map("n", "<leader>rr",  "<cmd>RunCode<CR>",     { desc = "Run: code" })
+map("n", "<leader>rf",  "<cmd>RunFile<CR>",     { desc = "Run: file" })
+map("n", "<leader>rft", "<cmd>RunFile tab<CR>", { desc = "Run: file in tab" })
+map("n", "<leader>rp",  "<cmd>RunProject<CR>",  { desc = "Run: project" })
+map("n", "<leader>rc",  "<cmd>RunClose<CR>",    { desc = "Run: close" })
+map("n", "<leader>crf", "<cmd>CRFiletype<CR>",  { desc = "Run: set filetype" })
+map("n", "<leader>crp", "<cmd>CRProjects<CR>",  { desc = "Run: projects" })
+
+-- =============================================================================
+-- SNIPRUN
+-- =============================================================================
+
+map({ "n", "v" }, "<leader>sr", "<cmd>SnipRun<CR>",   { desc = "SnipRun: run" })
+map("n",           "<leader>sc", "<cmd>SnipClose<CR>", { desc = "SnipRun: close" })
+map("n",           "<leader>sx", "<cmd>SnipReset<CR>", { desc = "SnipRun: reset" })
+
+-- =============================================================================
+-- TESTING (vim-test)
+-- =============================================================================
+
+map("n", "<leader>tt",  "<cmd>TestNearest<CR>", { desc = "Test: nearest" })
+map("n", "<leader>tT",  "<cmd>TestFile<CR>",    { desc = "Test: file" })
+map("n", "<leader>ts",  "<cmd>TestSuite<CR>",   { desc = "Test: suite" })
+map("n", "<leader>tl",  "<cmd>TestLast<CR>",    { desc = "Test: last" })
+map("n", "<leader>tv",  "<cmd>TestVisit<CR>",   { desc = "Test: visit" })
+
+-- =============================================================================
+-- JAVA (nvim-java)
+-- =============================================================================
+
+map("n", "<leader>jr",  "<cmd>JavaRunnerRunMain<CR>",       { desc = "Java: run main" })
+map("n", "<leader>js",  "<cmd>JavaRunnerStopMain<CR>",      { desc = "Java: stop" })
+map("n", "<leader>jtl", "<cmd>JavaRunnerToggleLogs<CR>",    { desc = "Java: toggle logs" })
+map("n", "<leader>jb",  "<cmd>JavaBuildBuildWorkspace<CR>", { desc = "Java: build" })
+
+-- =============================================================================
+-- EDITING UTILITIES
+-- =============================================================================
+
+-- Undotree
+map("n", "<leader>ut", "<cmd>UndotreeToggle<CR>", { desc = "Undotree toggle" })
+
+-- img-clip
+map("n", "<leader>pi", "<cmd>PasteImage<CR>", { desc = "Paste image" })
+
+-- =============================================================================
+-- SESSIONS
+-- =============================================================================
+
+map("n", "<leader>wr", "<cmd>SessionRestore<CR>", { desc = "Session: restore" })
+map("n", "<leader>ws", "<cmd>SessionSave<CR>",    { desc = "Session: save" })
+
+-- =============================================================================
+-- MARKDOWN → PDF
+-- =============================================================================
+
+map("n", "<leader>cl", "<cmd>MakePDF<CR>", { desc = "Markdown → PDF" })
