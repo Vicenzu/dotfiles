@@ -11,6 +11,14 @@ vim.keymap.set('i', 'jj', '<Esc>', {desc = "Exit insert mode"})
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
+-- nvim-java commands shorcuts
+mapkey("<leader>jr", "JavaRunnerRunMain", "n") -- Runs the application or selected main class (if there are multiple main classes)
+mapkey("<leader>js", "JavaRunnerStopMain", "n") -- Stops the running application
+mapkey("<leader>jtl", "JavaRunnerToggleLogs", "n") -- Toggle between show & hide runner log window 
+
+mapkey("<leader>jb", "JavaBuildBuildWorkspace", "n") -- Runs a full workspace build 
+mapkey("<leader>jb", "JavaBuildCleanWorkspace", "n") -- Clear the workspace cache (for now you have to close and reopen to restart the language server after the deletion)
+
 -- Buffer Navigation
 mapkey("<leader>bn", "bnext", "n") -- Next buffer
 mapkey("<leader>bp", "bprevious", "n") -- Prev buffer
@@ -177,7 +185,7 @@ vim.api.nvim_create_user_command("MakePDF", function()
   local current_file_dir = vim.fn.expand("%:p:h") -- La cartella dove si trova il file .md
 	local input = vim.fn.expand("%:t")
 	local output = vim.fn.expand("%:t:r") .. ".pdf"
-	
+
 	local cmd = {
 		"pandoc",
 		input,
@@ -204,7 +212,6 @@ vim.api.nvim_create_user_command("MakePDF", function()
 		end,
 	})
 end, {})
-
 -- Keymap
 vim.keymap.set("n", "<leader>cl", ":MakePDF<CR>", {
 	desc = "Convert Markdown to PDF (Custom LaTeX Style)",
