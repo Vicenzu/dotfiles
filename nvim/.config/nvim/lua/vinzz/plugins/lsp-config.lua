@@ -1,37 +1,7 @@
 return {
-	{
-		"williamboman/mason.nvim",
-		opts = {
-			ui = {
-				icons = {
-					package_installed = "✓",
-					package_pending = "→",
-					package_uninstalled = "✗",
-				},
-			},
-		},
-	},
-	{
-		"williamboman/mason-lspconfig.nvim",
-		config = function()
-			require("mason-lspconfig").setup({
-				ensure_installed = {
-					"lua_ls",
-					"emmet_ls",
-					"emmet_language_server",
-					"denols",
-					"asm_lsp",
-					"ts_ls",
-					"sqlls",
-					"omnisharp",
-					"basedpyright",
-					"jdtls",
-					"intelephense",
-					"clangd",
-				},
-			})
-		end,
-	},
+  -- ==========================
+  -- NVIM-LSPCONFIG
+  -- ==========================
 	{
 		"neovim/nvim-lspconfig",
 		lazy = false,
@@ -160,23 +130,6 @@ return {
 			})
 
 			--------------------------------------------------------------------
-			-- EMMET LS
-			--------------------------------------------------------------------
-			vim.lsp.config("emmet_ls", {
-				capabilities = capabilities,
-				filetypes = {
-					"html",
-					"typescriptreact",
-					"javascriptreact",
-					"css",
-					"sass",
-					"scss",
-					"less",
-					"svelte",
-				},
-			})
-
-			--------------------------------------------------------------------
 			-- EMMET LANGUAGE SERVER
 			--------------------------------------------------------------------
 			vim.lsp.config("emmet_language_server", {
@@ -258,54 +211,15 @@ return {
 				},
 			})
 
-			-- ------------------------------------------------------------------
-			--                          JDTLS (Java)
-			-- ------------------------------------------------------------------
-			local jdtls_path = vim.fn.stdpath("data") .. "/mason/packages/jdtls"
-			local launcher_jar = vim.fn.glob(jdtls_path .. "/plugins/org.eclipse.equinox.launcher_*.jar")
-			local config_dir = jdtls_path .. "/config_linux"
-			local workspace = vim.fn.stdpath("data")
-				.. "/jdtls-workspace/"
-				.. vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
-
-			vim.lsp.config("jdtls", {
-				capabilities = capabilities,
-				cmd = {
-					"java",
-					"-Declipse.application=org.eclipse.jdt.ls.core.id1",
-					"-Dosgi.bundles.defaultStartLevel=4",
-					"-Declipse.product=org.eclipse.jdt.ls.core.product",
-					"-Dlog.protocol=true",
-					"-Dlog.level=ALL",
-					"-Xms1g",
-					"-Xmx2G",
-					"-jar",
-					launcher_jar,
-					"-configuration",
-					config_dir,
-					"-data",
-					workspace,
-				},
-				root_dir = vim.fs.dirname(vim.fs.find({
-					".git",
-					"mvnw",
-					"gradlew",
-					"pom.xml",
-					"build.gradle",
-				}, { upward = true })[1] or vim.loop.cwd()),
-			})
-
 			--------------------------------------------------------------------
 			-- ENABLE ALL SERVERS
 			--------------------------------------------------------------------
 			vim.lsp.enable({
 				"lua_ls",
-				"emmet_ls",
 				"emmet_language_server",
 				"denols",
 				"asm_lsp",
 				"ts_ls",
-				"jdtls",
 				"sqlls",
 				"basedpyright",
 				"clangd",

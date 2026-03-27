@@ -51,6 +51,14 @@ map("t", "<C-k>", "<cmd>wincmd k<CR>", { desc = "Navigate up (term)" })
 map("t", "<C-l>", "<cmd>wincmd l<CR>", { desc = "Navigate right (term)" })
 
 -- =============================================================================
+-- TOGGLETERM
+-- =============================================================================
+
+map("n", "<leader>te", "<cmd>ToggleTerm<CR>", { desc = "Terminal: toggle" })
+map("n", "<leader>tf", "<cmd>ToggleTerm direction=float<CR>", { desc = "Terminal: float" })
+map("t", "<Esc>", "<C-\\><C-n>", { desc = "Terminal: normal mode" })
+
+-- =============================================================================
 -- BUFFER NAVIGATION
 -- =============================================================================
 
@@ -108,9 +116,16 @@ map("n", "<leader>fc",  "<cmd>Telescope git_bcommits<CR>",        { desc = "Tele
 map("n", "<leader>fl",  "<cmd>Telescope lsp_references<CR>",      { desc = "Telescope: LSP refs" })
 map("n", "<leader>pr",  "<cmd>Telescope oldfiles<CR>",            { desc = "Telescope: recent files" })
 map("n", "<leader>ths", "<cmd>Telescope themes<CR>",              { desc = "Telescope: themes" })
-map("n", "<leader>pWs", function()
-    require("telescope.builtin").grep_string({ search = vim.fn.expand("<cWORD>") })
-end, { desc = "Telescope: grep WORD" })
+map("n", "<leader>pWs",
+  function() require("telescope.builtin").grep_string({ search = vim.fn.expand("<cWORD>") }) end,
+  { desc = "Telescope: grep WORD" })
+
+-- =============================================================================
+-- MINI SPLITJOIN
+-- =============================================================================
+
+map({ "n", "x" }, "sj",   function() require("mini.splitjoin").join() end,   { desc = "Join args" })
+map({ "n", "x" }, "sk",   function() require("mini.splitjoin").split() end,  {desc = "Split args"})
 
 -- =============================================================================
 -- SNACKS PICKER
@@ -165,8 +180,6 @@ vim.api.nvim_create_autocmd("User", {
 
         -- MINI
         map("n", "<leader>cw",    function() require("mini.trailspace").trim() end,  { desc = "Trim whitespace" })
-        map({ "n", "x" }, "sj",   function() require("mini.splitjoin").join() end,   { desc = "Join args" })
-        map({ "n", "x" }, "sk",   function() require("mini.splitjoin").split() end,  { desc = "Split args" })
 
         -- EMMET
         map({ "n", "v" }, "<leader>xe", function() require("nvim-emmet").wrap_with_abbreviation() end, { desc = "Emmet wrap" })
@@ -175,8 +188,27 @@ vim.api.nvim_create_autocmd("User", {
         map("n", "zR", function() require("ufo").openAllFolds() end,  { desc = "Open all folds" })
         map("n", "zM", function() require("ufo").closeAllFolds() end, { desc = "Close all folds" })
 
+        require("which-key").add({
+        { "<leader>f",  group = "find (telescope)" },
+        { "<leader>g",  group = "git" },
+        { "<leader>h",  group = "git hunks" },
+        { "<leader>j",  group = "java" },
+        { "<leader>r",  group = "run / rename" },
+        { "<leader>s",  group = "sniprun / surround" },
+        { "<leader>t",  group = "test / terminal" },
+        { "<leader>x",  group = "trouble" },
+        { "<leader>d",  group = "debug (dap)" },
+        })
+
     end,
 })
+
+-- =============================================================================
+-- NOICE
+-- =============================================================================
+
+map("n", "<leader>nd", "<cmd>NoiceDismiss<CR>", { desc = "Noice: dismiss" })
+map("n", "<leader>nh", "<cmd>Noice history<CR>",  { desc = "Noice: history" })
 
 -- =============================================================================
 -- LSP
@@ -207,9 +239,11 @@ vim.api.nvim_create_autocmd("LspAttach", {
 -- FORMATTING & LINTING
 -- =============================================================================
 
-map({ "n", "v" }, "<leader>mp", function()
+map({ "n", "v" }, "<leader>mp",
+  function()
     require("conform").format({ lsp_fallback = true, async = false, timeout_ms = 1000 })
-end, { desc = "Format (conform)" })
+  end,
+  { desc = "Format (conform)" })
 
 map("n", "<leader>gf", function()
     vim.lsp.buf.format({ async = false })
@@ -258,6 +292,21 @@ map("n", "<leader>tT",  "<cmd>TestFile<CR>",    { desc = "Test: file" })
 map("n", "<leader>ts",  "<cmd>TestSuite<CR>",   { desc = "Test: suite" })
 map("n", "<leader>tl",  "<cmd>TestLast<CR>",    { desc = "Test: last" })
 map("n", "<leader>tv",  "<cmd>TestVisit<CR>",   { desc = "Test: visit" })
+
+-- =============================================================================
+-- DAP
+-- =============================================================================
+map("n", "<leader>db", function() require("dap").toggle_breakpoint() end, {desc = "DAP: breakpoint"})
+map("n", "<leader>dB", function() require("dap").set_breakpoint(vim.fn.input("Condition: ")) end,{ desc = "DAP: conditional bp" })
+map("n", "<leader>dc", function() require("dap").continue() end,{desc = "DAP: continue" })
+map("n", "<leader>di", function() require("dap").step_into() end,{desc = "DAP: step into" })
+map("n", "<leader>do", function() require("dap").step_over() end,{desc = "DAP: step over" })
+map("n", "<leader>dO", function() require("dap").step_out() end,{desc = "DAP: step out" })
+map("n", "<leader>dr", function() require("dap").repl.open() end,{desc = "DAP: repl" })
+map("n", "<leader>dl", function() require("dap").run_last() end,{desc = "DAP: run last" })
+map("n", "<leader>du", function() require("dapui").toggle() end,{desc = "DAP: toggle UI" })
+map("n", "<leader>dx", function() require("dap").terminate() end,{desc = "DAP: terminate" })
+
 
 -- =============================================================================
 -- JAVA (nvim-java)
