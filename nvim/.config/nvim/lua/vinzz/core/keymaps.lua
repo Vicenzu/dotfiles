@@ -104,21 +104,8 @@ map("n", "<leader><Tab>", "<cmd>Neotree filesystem reveal left<CR>", { desc = "N
 -- TELESCOPE
 -- =============================================================================
 
-map("n", "<leader>ff",  "<cmd>Telescope find_files<CR>",  { desc = "Telescope: files" })
-map("n", "<leader>fg",  "<cmd>Telescope live_grep<CR>",   { desc = "Telescope: grep" })
-map("n", "<leader>fb",  "<cmd>Telescope buffers<CR>",     { desc = "Telescope: buffers" })
-map("n", "<leader>fk",  "<cmd>Telescope keymaps<CR>",     { desc = "Telescope: keymaps" })
-map("n", "<leader>fh",  "<cmd>Telescope help_tags<CR>",   { desc = "Telescope: help" })
 map("n", "<leader>fa",  "<cmd>Telescope<CR>",             { desc = "Telescope: all" })
-map("n", "<leader>fx",  "<cmd>Telescope diagnostics bufnr=0<CR>", { desc = "Telescope: doc diagnostics" })
-map("n", "<leader>fX",  "<cmd>Telescope diagnostics<CR>",         { desc = "Telescope: ws diagnostics" })
-map("n", "<leader>fc",  "<cmd>Telescope git_bcommits<CR>",        { desc = "Telescope: git commits" })
-map("n", "<leader>fl",  "<cmd>Telescope lsp_references<CR>",      { desc = "Telescope: LSP refs" })
-map("n", "<leader>pr",  "<cmd>Telescope oldfiles<CR>",            { desc = "Telescope: recent files" })
 map("n", "<leader>ths", "<cmd>Telescope themes<CR>",              { desc = "Telescope: themes" })
-map("n", "<leader>pWs",
-  function() require("telescope.builtin").grep_string({ search = vim.fn.expand("<cWORD>") }) end,
-  { desc = "Telescope: grep WORD" })
 
 -- =============================================================================
 -- MINI SPLITJOIN
@@ -131,12 +118,23 @@ map({ "n", "x" }, "sk",   function() require("mini.splitjoin").split() end,  {de
 -- SNACKS PICKER
 -- =============================================================================
 
-map({ "n", "x" }, "<leader>pws", function() require("snacks").picker.grep_word() end,                      { desc = "Snacks: grep word" })
-map("n",           "<leader>pk",  function() require("snacks").picker.keymaps({ layout = "ivy" }) end,     { desc = "Snacks: keymaps" })
-map("n",           "<leader>gbr", function() require("snacks").picker.git_branches({ layout = "select" }) end, { desc = "Snacks: git branches" })
-map("n",           "<leader>th",  function() require("snacks").picker.colorschemes({ layout = "ivy" }) end,{ desc = "Snacks: colorschemes" })
-map("n",           "<leader>vh",  function() require("snacks").picker.help() end,                          { desc = "Snacks: help" })
-map("n",           "<leader>pt",  function() require("snacks").picker.todo_comments() end,                 { desc = "Snacks: todos" })
+map("n", "<leader>ff",  function() require("snacks").picker.files() end,                          { desc = "Picker: files" })
+map("n", "<leader>fg",  function() require("snacks").picker.grep() end,                           { desc = "Picker: grep" })
+map("n", "<leader>fb",  function() require("snacks").picker.buffers() end,                        { desc = "Picker: buffers" })
+map("n", "<leader>fk",  function() require("snacks").picker.keymaps() end,                        { desc = "Picker: keymaps" })
+map("n", "<leader>fh",  function() require("snacks").picker.help() end,                           { desc = "Picker: help" })
+map("n", "<leader>fx",  function() require("snacks").picker.diagnostics_buffer() end,             { desc = "Picker: doc diagnostics" })
+map("n", "<leader>fX",  function() require("snacks").picker.diagnostics() end,                    { desc = "Picker: ws diagnostics" })
+map("n", "<leader>fl",  function() require("snacks").picker.lsp_references() end,                 { desc = "Picker: LSP refs" })
+map("n", "<leader>fc",  function() require("snacks").picker.git_log_file() end,                   { desc = "Picker: git log file" })
+map("n", "<leader>pr",  function() require("snacks").picker.recent() end,                         { desc = "Picker: recent files" })
+map("n", "<leader>ths", function() require("snacks").picker.colorschemes() end,                   { desc = "Picker: colorschemes" })
+map("n", "<leader>pWs", function() require("snacks").picker.grep_word() end,                      { desc = "Picker: grep WORD" })
+map({ "n", "x" }, "<leader>pws", function() require("snacks").picker.grep_word() end,             { desc = "Picker: grep word" })
+map("n", "<leader>gbr", function() require("snacks").picker.git_branches({ layout = "select" }) end, { desc = "Snacks: git branches" })
+map("n", "<leader>th",  function() require("snacks").picker.colorschemes({ layout = "ivy" }) end,{ desc = "Snacks: colorschemes" })
+map("n", "<leader>vh",  function() require("snacks").picker.help() end,                          { desc = "Snacks: help" })
+map("n", "<leader>pt",  function() require("snacks").picker.todo_comments() end,                 { desc = "Snacks: todos" })
 
 -- =============================================================================
 -- SNACKS WORKFLOW
