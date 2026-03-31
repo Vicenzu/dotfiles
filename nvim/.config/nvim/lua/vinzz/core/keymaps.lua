@@ -1,4 +1,6 @@
+require("vinzz.utils.MakePDF")
 local map = vim.keymap.set
+local function nmap(key, cmd) vim.keymap.set("n", key, cmd, { noremap = true, silent = true }) end
 
 -- =============================================================================
 -- CORE
@@ -64,8 +66,6 @@ map("t", "<Esc>", "<C-\\><C-n>", { desc = "Terminal: normal mode" })
 -- BUFFER NAVIGATION
 -- =============================================================================
 
-map("n", "<leader>bn", "<cmd>bnext<CR>", { desc = "Next buffer" })
-map("n", "<leader>bp", "<cmd>bprevious<CR>", { desc = "Prev buffer" })
 map("n", "<leader>bb", "<cmd>e #<CR>", { desc = "Alternate buffer" })
 map("n", "<leader>`", "<cmd>e #<CR>", { desc = "Alternate buffer" })
 
@@ -107,7 +107,7 @@ map("n", "<leader><Tab>", "<cmd>Neotree filesystem reveal left<CR>", { desc = "N
 -- =============================================================================
 
 map("n", "<leader>fa", "<cmd>Telescope<CR>", { desc = "Telescope: all" })
-map("n", "<leader>ths", "<cmd>Telescope themes<CR>", { desc = "Telescope: themes" })
+map("n", "<leader>tth", "<cmd>Telescope themes<CR>", { desc = "Telescope: themes" })
 
 -- =============================================================================
 -- MINI SPLITJOIN
@@ -115,6 +115,18 @@ map("n", "<leader>ths", "<cmd>Telescope themes<CR>", { desc = "Telescope: themes
 
 map({ "n", "x" }, "sj", function() require("mini.splitjoin").join() end, { desc = "Join args" })
 map({ "n", "x" }, "sk", function() require("mini.splitjoin").split() end, { desc = "Split args" })
+
+-- =============================================================================
+-- MINI SURROUND (non funzionano in questo file)
+-- =============================================================================
+-- map ({"n", "v"}, "sa", function() require("mini.surround").add() end, {desc = "Add surrounding"})
+-- map("n", "ds", function() require("mini.surround").delete() end, {desc = "Delete surrounding"})
+-- map("n", "sf", function() require("mini.surround").find() end, {desc = "Find surrounding (to the right)"})
+-- map("n", "sF", function() require("mini.surround").find_left() end, {desc = "Find surrounding (to the left)"})
+-- map("n", "sh", function() require("mini.surround").highlight() end, {desc = "Highlight surrounding"}) map("n", "sr", function() require("mini.surround").replace() end, {desc = "Replace surrounding"})
+-- map("n", "sn", function() require("mini.surround").update_n_lines() end, {desc = "Update n lines"})
+-- map("n", "l", function() require("mini.surround").suffix_last() end, {desc = "Suffix to search with 'prev' method"})
+-- map("n", "n", function() require("mini.surround").suffix_next() end, {desc = "Suffix to search with 'next' method"})
 
 -- =============================================================================
 -- SNACKS PICKER
@@ -189,6 +201,16 @@ vim.api.nvim_create_autocmd("User", {
 		map("n", "zR", function() require("ufo").openAllFolds() end, { desc = "Open all folds" })
 		map("n", "zM", function() require("ufo").closeAllFolds() end, { desc = "Close all folds" })
 
+    map({ "n", "x"}, "s", function() require("flash").jump() end, {desc = "Flash jump"})
+    map({ "n", "x"}, "S", function() require("flash").treesitter() end, {desc = "Flash Treesitter"})
+
+    -- HOVER
+    map("n", "K",  function() if package.loaded["hover"] then require("hover").hover() else vim.lsp.buf.hover() end end, { desc = "Hover" })
+    map("n", "gK", function() if package.loaded["hover"] then require("hover").hover_select() end end, { desc = "Hover: scegli sorgente" })
+    -- naviga tra le sorgenti dentro il popup:
+    map("n", "]]", function() if package.loaded["hover"] then require("hover").hover_switch("+") end end, { desc = "Hover: sorgente successiva" })
+    map("n", "[[", function() if package.loaded["hover"] then require("hover").hover_switch("-") end end, { desc = "Hover: sorgente precedente" })
+
 		require("which-key").add({
 			{ "<leader>f", group = "find (telescope)" },
 			{ "<leader>g", group = "git" },
@@ -221,7 +243,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
 			vim.keymap.set(mode, lhs, rhs, { buffer = ev.buf, silent = true, desc = desc })
 		end
 
-		lmap("n", "K", vim.lsp.buf.hover, "LSP: hover")
 		lmap("n", "gd", vim.lsp.buf.definition, "LSP: definition")
 		lmap("n", "gD", vim.lsp.buf.declaration, "LSP: declaration")
 		lmap("n", "gi", "<cmd>Telescope lsp_implementations<CR>", "LSP: implementations")
@@ -234,6 +255,12 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		lmap("n", "<leader>rs", "<cmd>LspRestart<CR>", "LSP: restart")
 	end,
 })
+-- DIAGNOSTICS
+map("n", "]d", function() vim.diagnostic.jump({ count = 1 }) end, { desc = "Next diagnostic" })
+map("n", "[d", function() vim.diagnostic.jump({ count = -1 }) end, { desc = "Prev diagnostic" })
+-- Opzionale: salta solo agli errori (severity = ERROR)
+map("n", "]e", function() vim.diagnostic.jump({ count = 1, severity = vim.diagnostic.severity.ERROR }) end, { desc = "Next error" })
+map("n", "[e", function() vim.diagnostic.jump({ count = -1, severity = vim.diagnostic.severity.ERROR }) end, { desc = "Prev error" })
 
 -- =============================================================================
 -- FORMATTING & LINTING
@@ -311,7 +338,6 @@ map("n", "<leader>jb", "<cmd>JavaBuildBuildWorkspace<CR>", { desc = "Java: build
 
 -- Undotree
 map("n", "<leader>ut", "<cmd>UndotreeToggle<CR>", { desc = "Undotree toggle" })
-
 -- img-clip
 map("n", "<leader>pi", "<cmd>PasteImage<CR>", { desc = "Paste image" })
 
@@ -327,5 +353,15 @@ map("n", "<leader>ws", "<cmd>SessionSave<CR>", { desc = "Session: save" })
 -- =============================================================================
 
 map("n", "<leader>cl", "<cmd>MakePDF<CR>", { desc = "Markdown → PDF" })
+
+-- =============================================================================
+-- MERGE CONFLICTS
+-- =============================================================================
+-- Merge conflicts con diffview.nvim
+map("n", "<leader>gdo", "<cmd>DiffviewOpen<cr>", { desc = "Diffview: apri" })
+map("n", "<leader>gdh", "<cmd>DiffviewFileHistory %<cr>", { desc = "Diffview: history file" })
+map("n", "<leader>gdc", "<cmd>DiffviewClose<cr>", { desc = "Diffview: chiudi" })
+map("n", "]c", "<cmd>norm! ]c<cr>", { desc = "Merge: conflitto successivo" })
+map("n", "[c", "<cmd>norm! [c<cr>", { desc = "Merge: conflitto precedente" })
 
 
