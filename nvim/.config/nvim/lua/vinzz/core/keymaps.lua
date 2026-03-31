@@ -361,6 +361,11 @@ map("n", "<leader>cl", "<cmd>MakePDF<CR>", { desc = "Markdown → PDF" })
 map("n", "<leader>gdo", "<cmd>DiffviewOpen<cr>", { desc = "Diffview: apri" })
 map("n", "<leader>gdh", "<cmd>DiffviewFileHistory %<cr>", { desc = "Diffview: history file" })
 map("n", "<leader>gdc", "<cmd>DiffviewClose<cr>", { desc = "Diffview: chiudi" })
-map("n", "]c", "<cmd>norm! ]c<cr>", { desc = "Merge: conflitto successivo" })
-map("n", "[c", "<cmd>norm! [c<cr>", { desc = "Merge: conflitto precedente" })
+-- <leader>co   → accetta OURS (blocco sinistro)
+-- <leader>ct   → accetta THEIRS (blocco destro)
+-- <leader>cb   → accetta BASE
+-- <leader>ca   → accetta tutti e tre insieme (per conflitti complessi)
+-- dx           → elimina il conflitto senza scegliere nessuno
+-- ]x / [x      → naviga tra i conflitti
+
 
