@@ -364,4 +364,4 @@ map("n", "<leader>gdc", "<cmd>DiffviewClose<cr>", { desc = "Diffview: chiudi" })
 map("n", "]c", "<cmd>norm! ]c<cr>", { desc = "Merge: conflitto successivo" })
 map("n", "[c", "<cmd>norm! [c<cr>", { desc = "Merge: conflitto precedente" })
 
-
+-- cciaoiao
