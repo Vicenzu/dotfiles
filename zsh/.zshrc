@@ -24,7 +24,7 @@ autoload -U compinit && compinit
 #Keybindings for autocompletions and settings
 bindkey -e
 bindkey '^p' history-search-backward
-bindkey '^n' history-serach-forward
+bindkey '^n' history-search-forward
 
 HISTSIZE=5000
 HISTFILE=~/.zsh_history
@@ -76,16 +76,8 @@ source $ZSH/oh-my-zsh.sh
 # ------------------------------- FLUTTER + ANDROID + JAVA CONFIG
 # -------------------------------
 
-# Flutter SDK
-export FLUTTER_HOME=/usr/share/flutter
-export PATH=$FLUTTER_HOME/bin:$PATH
 
-# Android SDK
-export ANDROID_HOME=/opt/android-sdk
-export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
-export PATH=$PATH:$ANDROID_HOME/platform-tools
-
-# Java JDK (OpenJDK 21)
+# Java JDK (OpenJDK 26)
 export JAVA_HOME=/usr/lib/jvm/java-26-openjdk
 export PATH=$JAVA_HOME/bin:$PATH
 
@@ -108,7 +100,7 @@ alias dots='cd ~/dotfiles'
 alias dotsync='cd ~/dotfiles && git add . && git commit -m "update dotfiles" && git push'
 alias dotpull='cd ~/dotfiles && git pull && stow -R .'
 alias algs='cd ~/Documents/Algorythms/'
-alias algssync='cd ~/Documents/Algorythms/ && git add . && git commit -m "update Algorythms" && git push '
+alias algssync='cd ~/Documents/Algorythms/ && git add . && git commit -m "update Algorithms" && git push '
 
 alias ff='fastfetch'
 alias uni='cd ~/Documents/Uni/'
