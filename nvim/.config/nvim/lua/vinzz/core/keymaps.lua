@@ -202,7 +202,6 @@ vim.api.nvim_create_autocmd("User", {
 		map("n", "zM", function() require("ufo").closeAllFolds() end, { desc = "Close all folds" })
 
     map({ "n", "x"}, "s", function() require("flash").jump() end, {desc = "Flash jump"})
-    map({ "n", "x"}, "S", function() require("flash").treesitter() end, {desc = "Flash Treesitter"})
 
     -- HOVER
     map("n", "K",  function() if package.loaded["hover"] then require("hover").hover() else vim.lsp.buf.hover() end end, { desc = "Hover" })
