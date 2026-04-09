@@ -68,14 +68,12 @@ return {
 				routes = {
 					{
 						filter = {
-							event = "msg_show",
-							any = {
-								{ find = "%d+L, %d+B" },
-								{ find = "; after #%d+" },
-								{ find = "; before #%d+" },
-								{ find = "%d fewer lines" },
-								{ find = "%d more lines" },
-							},
+							event = "lsp",
+              kind = "progress",
+              any = {
+                { find = "Publish Diagnostics"},
+                { find = "Validate documents" },
+              },
 						},
 						opts = { skip = true },
 					},
