@@ -36,8 +36,7 @@ return {
                     file = {
                         filename_first = false,
                         filename_only = false,
-                        icon_width = 2,
-                    },
+                        icon_width = 2, },
                 },
                 layout = {
                     -- presets options : "default" , "ivy" , "ivy-split" , "telescope" , "vscode", "select" , "sidebar"
@@ -64,7 +63,7 @@ return {
                         }
                     },
                     telescope = {
-                        reverse = true, -- set to false for search bar to be on top 
+                        reverse = true, -- set to false for search bar to be on top
                         layout = {
                             box = "horizontal",
                             backdrop = false,
@@ -133,7 +132,7 @@ return {
            dashboard = {
                enabled = true,
                 sections = {
-                    --{ 
+                    --{
                     --    section = "terminal",
                     --    cmd = "ascii-image-converter ~/Scaricati/undertaker.png -W 40 -C -c",
                         --cmd = "ascii-image-converter ~/Immagini/resized2.png -C -c",

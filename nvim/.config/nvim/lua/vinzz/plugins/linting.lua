@@ -8,29 +8,29 @@ return {
 
 		-- if Eslint error configuration not found : change MasonInstall eslint@version or npm i -g eslint at a specific version
 		lint.linters_by_ft = {
-			javascript = {"biomejs"},
-			typescript = {"biomejs"},
-			javascriptreact = {"biomejs"},
-			typescriptreact = {"biomejs"},
+			javascript = { "biomejs" },
+			typescript = { "biomejs" },
+			javascriptreact = { "biomejs" },
+			typescriptreact = { "biomejs" },
 			svelte = { "biomejs" },
 			python = { "pylint" },
-            java = { "checkstyle" },
+			java = { "checkstyle" },
 		}
 
-        lint.linters.checkstyle = {
-            cmd = "checkstyle", -- Deve essere nel PATH (Mason o manuale)
-            stdin = false,
-            args = function()
-                return {
-                    "-c", vim.fn.stdpath("data") .. "/checkstyle/google_checks.xml", -- Percorso locale dopo download
-                    vim.fn.expand("%:p")
-                }
-            end,
-            stream = "stdout",
-            ignore_exitcode = true,
-            parser = require("lint.parser").from_errorformat([[%f:%l: %m]], { source = "checkstyle" }),
-        }
-
+		lint.linters.checkstyle = {
+			cmd = "checkstyle", -- Deve essere nel PATH (Mason o manuale)
+			stdin = false,
+			args = function()
+				return {
+					"-c",
+					vim.fn.stdpath("data") .. "/checkstyle/google_checks.xml", -- Percorso locale dopo download
+					vim.fn.expand("%:p"),
+				}
+			end,
+			stream = "stdout",
+			ignore_exitcode = true,
+			parser = require("lint.parser").from_errorformat([[%f:%l:%c: %m]], { source = "checkstyle" }),
+		}
 
 		eslint.args = {
 			"--no-warn-ignored",
@@ -39,11 +39,11 @@ return {
 			"--stdin",
 			"--stdin-filename",
 			function()
-                return vim.fn.expand("%:p")
+				return vim.fn.expand("%:p")
 			end,
 		}
 
-		vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {
+		vim.api.nvim_create_autocmd({ "BufWritePost", "InsertLeave", "LspAttach" }, {
 			group = lint_augroup,
 			callback = function()
 				lint.try_lint()
@@ -55,4 +55,3 @@ return {
 		end, { desc = "Trigger linting for current file" })
 	end,
 }
-

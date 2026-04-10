@@ -44,20 +44,6 @@ opt.encoding = "UTF-8"
 opt.showmode = false
 
 --folds
---opt.foldmethod = "expr"
-opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 opt.foldlevel = 99
 
--- Enable folding ( setup in nvim-ufo )
-vim.o.foldenable = true     -- Enable folding by default
-vim.o.foldmethod = "manual" -- Default fold method (change as needed)
-vim.o.foldlevel = 99        -- Open most folds by default
-vim.o.foldcolumn = "0"
-
 vim.g.editorconfig = true
-
-vim.api.nvim_create_autocmd("FileType", {
-  callback = function(ev)
-    pcall(vim.treesitter.start, ev.buf)
-  end,
-})

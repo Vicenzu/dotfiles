@@ -107,7 +107,3 @@ vim.api.nvim_create_user_command("MakePDF", function()
 		end,
 	})
 end, {})
--- Keymap
-vim.keymap.set("n", "<leader>cl", ":MakePDF<CR>", {
-	desc = "Convert Markdown to PDF (Custom LaTeX Style)",
-})
