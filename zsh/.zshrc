@@ -101,7 +101,7 @@ alias dotsync='cd ~/dotfiles && git add . && git commit -m "update dotfiles" && 
 alias dotpull='cd ~/dotfiles && git pull && stow -R .'
 alias algs='cd ~/Documents/Algorithms/'
 alias algssync='cd ~/Documents/Algorithms/ && git add . && git commit -m "update Algorithms" && git push '
-
+alias cl='cleaning.sh'
 alias ff='fastfetch'
 alias uni='cd ~/Documents/Uni/'
 alias lg='lazygit'
