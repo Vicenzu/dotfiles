@@ -201,8 +201,6 @@ vim.api.nvim_create_autocmd("User", {
 		map("n", "zR", function() require("ufo").openAllFolds() end, { desc = "Open all folds" })
 		map("n", "zM", function() require("ufo").closeAllFolds() end, { desc = "Close all folds" })
 
-    map({ "n", "x"}, "s", function() require("flash").jump() end, {desc = "Flash jump"})
-
     -- HOVER
     map("n", "K",  function() if package.loaded["hover"] then require("hover").hover() else vim.lsp.buf.hover() end end, { desc = "Hover" })
     map("n", "gK", function() if package.loaded["hover"] then require("hover").hover_select() end end, { desc = "Hover: scegli sorgente" })

@@ -69,11 +69,14 @@ return {
 					{
 						filter = {
 							event = "lsp",
-              kind = "progress",
-              any = {
-                { find = "Publish Diagnostics"},
-                { find = "Validate documents" },
-              },
+							kind = "progress",
+						},
+						opts = { skip = true },
+					},
+					{
+						filter = {
+							event = "msg_show",
+							kind = "",
 						},
 						opts = { skip = true },
 					},

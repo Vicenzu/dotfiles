@@ -47,3 +47,9 @@ opt.showmode = false
 opt.foldlevel = 99
 
 vim.g.editorconfig = true
+
+vim.api.nvim_create_autocmd("TextYankPost", {
+	callback = function()
+		vim.highlight.on_yank()
+	end,
+})
