@@ -37,5 +37,4 @@ return {
             },
         })
     end,
-    keys = {},
 }

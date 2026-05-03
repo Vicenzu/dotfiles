@@ -5,6 +5,5 @@ return {
 		focus = true,
 	},
 	cmd = "Trouble",
-	keys = {},
 }
 

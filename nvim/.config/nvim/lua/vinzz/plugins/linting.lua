@@ -15,6 +15,8 @@ return {
 			svelte = { "biomejs" },
 			python = { "pylint" },
 			java = { "checkstyle" },
+			c = { "clangtidy" },
+			cpp = { "clangtidy" },
 		}
 
 		lint.linters.checkstyle = {

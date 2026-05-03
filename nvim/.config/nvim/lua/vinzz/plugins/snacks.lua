@@ -148,6 +148,21 @@ return {
 			--        hl = "Include",  -- o un tuo gruppo di highlight
 			--    }
 			--},
+			terminal = {
+				enabled = true,
+				win = {
+					style = "terminal",
+					position = "float",
+					height = 0.8,
+					width = 0.8,
+					border = "rounded",
+				},
+			},
+			words = {
+				enabled = true,
+				debounce = 200,
+				notify_jump = false,
+			},
 			dashboard = {
 				enabled = true,
 				sections = {

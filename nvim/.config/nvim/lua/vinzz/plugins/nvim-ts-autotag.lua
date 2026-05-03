@@ -2,7 +2,7 @@ return {
 	-- NOTE: js,ts,jsx,tsx Auto Close Tags
 	"windwp/nvim-ts-autotag",
 	enabled = true,
-  ependencies = { "nvim-treesitter/nvim-treesitter" },
+  dependencies = { "nvim-treesitter/nvim-treesitter" },
 	ft = { "html", "xml", "javascript", "typescript", "javascriptreact", "typescriptreact", "svelte" },
 	config = function()
 		-- Independent nvim-ts-autotag setup

@@ -1,7 +1,7 @@
 return {
-  -- ==========================
-  -- MASON
-  -- ==========================
+	-- ==========================
+	-- MASON
+	-- ==========================
 	{
 		"williamboman/mason.nvim",
 		opts = {
@@ -14,9 +14,9 @@ return {
 			},
 		},
 	},
-  -- ==========================
-  -- MASON-LSPCONFIG
-  -- ==========================
+	-- ==========================
+	-- MASON-LSPCONFIG
+	-- ==========================
 	{
 		"williamboman/mason-lspconfig.nvim",
 		config = function()
@@ -37,5 +37,14 @@ return {
 		end,
 	},
 
-
+	{
+		"rshkarin/mason-nvim-lint",
+		dependencies = { "williamboman/mason.nvim", "mfussenegger/nvim-lint" },
+		config = function()
+			require("mason-nvim-lint").setup({
+				ensure_installed = { "pylint", "biomejs" },
+				automatic_installation = true,
+			})
+		end,
+	},
 }

@@ -1,7 +1,6 @@
 require("vinzz.utils.MakePDF")
 local map = vim.keymap.set
 local function nmap(key, cmd) vim.keymap.set("n", key, cmd, { noremap = true, silent = true }) end
-
 -- =============================================================================
 -- CORE
 -- =============================================================================
@@ -55,11 +54,10 @@ map("t", "<C-k>", "<cmd>wincmd k<CR>", { desc = "Navigate up (term)" })
 map("t", "<C-l>", "<cmd>wincmd l<CR>", { desc = "Navigate right (term)" })
 
 -- =============================================================================
--- TOGGLETERM
+-- SNACKS Terminal
 -- =============================================================================
 
-map("n", "<leader>te", "<cmd>ToggleTerm<CR>", { desc = "Terminal: toggle" })
-map("n", "<leader>tf", "<cmd>ToggleTerm direction=float<CR>", { desc = "Terminal: float" })
+map("n", "<leader>te", function() require("snacks").terminal.toggle() end, { desc = "Terminal: toggle" })
 map("t", "<Esc>", "<C-\\><C-n>", { desc = "Terminal: normal mode" })
 
 -- =============================================================================
@@ -69,32 +67,33 @@ map("t", "<Esc>", "<C-\\><C-n>", { desc = "Terminal: normal mode" })
 map("n", "<leader>bb", "<cmd>e #<CR>", { desc = "Alternate buffer" })
 map("n", "<leader>`", "<cmd>e #<CR>", { desc = "Alternate buffer" })
 
--- =============================================================================
--- BARBAR
+-- -- =============================================================================
+-- BUFFERLINE
 -- =============================================================================
 
-map("n", "<A-,>", "<cmd>BufferPrevious<CR>", { desc = "Buffer: prev" })
-map("n", "<A-.>", "<cmd>BufferNext<CR>", { desc = "Buffer: next" })
-map("n", "<A-<>", "<cmd>BufferMovePrevious<CR>", { desc = "Buffer: move prev" })
-map("n", "<A->>", "<cmd>BufferMoveNext<CR>", { desc = "Buffer: move next" })
-map("n", "<A-1>", "<cmd>BufferGoto 1<CR>", { desc = "Buffer: goto 1" })
-map("n", "<A-2>", "<cmd>BufferGoto 2<CR>", { desc = "Buffer: goto 2" })
-map("n", "<A-3>", "<cmd>BufferGoto 3<CR>", { desc = "Buffer: goto 3" })
-map("n", "<A-4>", "<cmd>BufferGoto 4<CR>", { desc = "Buffer: goto 4" })
-map("n", "<A-5>", "<cmd>BufferGoto 5<CR>", { desc = "Buffer: goto 5" })
-map("n", "<A-6>", "<cmd>BufferGoto 6<CR>", { desc = "Buffer: goto 6" })
-map("n", "<A-7>", "<cmd>BufferGoto 7<CR>", { desc = "Buffer: goto 7" })
-map("n", "<A-8>", "<cmd>BufferGoto 8<CR>", { desc = "Buffer: goto 8" })
-map("n", "<A-9>", "<cmd>BufferGoto 9<CR>", { desc = "Buffer: goto 9" })
-map("n", "<A-0>", "<cmd>BufferLast<CR>", { desc = "Buffer: last" })
-map("n", "<A-p>", "<cmd>BufferPin<CR>", { desc = "Buffer: pin" })
-map("n", "<A-c>", "<cmd>BufferClose<CR>", { desc = "Buffer: close" })
-map("n", "<C-p>", "<cmd>BufferPick<CR>", { desc = "Buffer: pick" })
-map("n", "<Space>bb", "<cmd>BufferOrderByBufferNumber<CR>", { desc = "Buffer: order by number" })
-map("n", "<Space>bn", "<cmd>BufferOrderByName<CR>", { desc = "Buffer: order by name" })
-map("n", "<Space>bd", "<cmd>BufferOrderByDirectory<CR>", { desc = "Buffer: order by dir" })
-map("n", "<Space>bl", "<cmd>BufferOrderByLanguage<CR>", { desc = "Buffer: order by lang" })
-map("n", "<Space>bw", "<cmd>BufferOrderByWindowNumber<CR>", { desc = "Buffer: order by window" })
+map("n", "<A-,>", "<cmd>BufferLineCyclePrev<CR>",        { desc = "Buffer: prev" })
+map("n", "<A-.>", "<cmd>BufferLineCycleNext<CR>",        { desc = "Buffer: next" })
+map("n", "<A-<>", "<cmd>BufferLineMovePrev<CR>",         { desc = "Buffer: move prev" })
+map("n", "<A->>", "<cmd>BufferLineMoveNext<CR>",         { desc = "Buffer: move next" })
+map("n", "<A-1>", "<cmd>BufferLineGoToBuffer 1<CR>",     { desc = "Buffer: goto 1" })
+map("n", "<A-2>", "<cmd>BufferLineGoToBuffer 2<CR>",     { desc = "Buffer: goto 2" })
+map("n", "<A-3>", "<cmd>BufferLineGoToBuffer 3<CR>",     { desc = "Buffer: goto 3" })
+map("n", "<A-4>", "<cmd>BufferLineGoToBuffer 4<CR>",     { desc = "Buffer: goto 4" })
+map("n", "<A-5>", "<cmd>BufferLineGoToBuffer 5<CR>",     { desc = "Buffer: goto 5" })
+map("n", "<A-6>", "<cmd>BufferLineGoToBuffer 6<CR>",     { desc = "Buffer: goto 6" })
+map("n", "<A-7>", "<cmd>BufferLineGoToBuffer 7<CR>",     { desc = "Buffer: goto 7" })
+map("n", "<A-8>", "<cmd>BufferLineGoToBuffer 8<CR>",     { desc = "Buffer: goto 8" })
+map("n", "<A-9>", "<cmd>BufferLineGoToBuffer 9<CR>",     { desc = "Buffer: goto 9" })
+map("n", "<A-0>", "<cmd>BufferLineGoToBuffer -1<CR>",    { desc = "Buffer: last" })
+map("n", "<A-p>", "<cmd>BufferLineTogglePin<CR>",        { desc = "Buffer: pin/unpin" })
+map("n", "<A-c>", function() require("snacks").bufdelete() end, { desc = "Buffer: close" })
+map("n", "<C-p>", "<cmd>BufferLinePick<CR>",             { desc = "Buffer: pick (lettera)" })
+map("n", "<A-s>", "<cmd>BufferLinePickClose<CR>",        { desc = "Buffer: pick e chiudi" })
+map("n", "<leader>bco","<cmd>BufferLineCloseOthers<CR>", { desc = "Buffer: chiudi altri" })
+map("n", "<leader>bcl","<cmd>BufferLineCloseLeft<CR>",   { desc = "Buffer: chiudi a sinistra" })
+map("n", "<leader>bcr","<cmd>BufferLineCloseRight<CR>",  { desc = "Buffer: chiudi a destra" })
+map("n", "<Space>bb", "<cmd>BufferLineSortByTabs<CR>",   { desc = "Buffer: sort by tab" })
+map("n", "<Space>bn", "<cmd>BufferLineSortByRelativeDirectory<CR>", { desc = "Buffer: sort by dir" })
 
 -- =============================================================================
 -- FILE TREE
@@ -187,15 +186,16 @@ vim.api.nvim_create_autocmd("User", {
 		map("n", "<leader>hd", function() require("gitsigns").diffthis() end, { desc = "Gitsigns: diff" })
 		map("n", "<leader>hp", function() require("gitsigns").preview_hunk() end, { desc = "Gitsigns: preview hunk" })
 
+    -- Snacks next word occurrence
+    map("n", "]w", function() require("snacks").words.jump(1) end, { desc = "Snacks: next word occurrence" })
+    map("n", "[w", function() require("snacks").words.jump(-1) end, { desc = "Snacks: prev word occurrence" })
+
 		-- TODO COMMENTS
 		map("n", "]t", function() require("todo-comments").jump_next() end, { desc = "Todo: next" })
 		map("n", "[t", function() require("todo-comments").jump_prev() end, { desc = "Todo: prev" })
 
 		-- MINI
 		map("n", "<leader>cw", function() require("mini.trailspace").trim() end, { desc = "Trim whitespace" })
-
-		-- EMMET
-		map({ "n", "v" }, "<leader>xe", function() require("nvim-emmet").wrap_with_abbreviation() end, { desc = "Emmet wrap" })
 
 		-- UFO FOLDING
 		map("n", "zR", function() require("ufo").openAllFolds() end, { desc = "Open all folds" })
@@ -365,4 +365,15 @@ map("n", "<leader>gdc", "<cmd>DiffviewClose<cr>", { desc = "Diffview: chiudi" })
 -- dx           → elimina il conflitto senza scegliere nessuno
 -- ]x / [x      → naviga tra i conflitti
 
+-- ============================================================================
+-- SPECTRE
+-- ============================================================================
+map("n", "<leader>so", function() require("spectre").open() end, { desc = "Spectre: open" })
+map("n", "<leader>sw", function() require("spectre").open_visual({ select_word = true }) end, { desc = "Spectre: search word" })
+map("n", "<leader>sf", function() require("spectre").open_file_search() end, { desc = "Spectre: search in file" })
+
+-- ============================================================================
+-- MARKDOWN-PREVIEW
+-- ============================================================================
+map("n", "<leader>mp", "<cmd>MarkdownPreviewToggle<CR>", { desc = "Markdown: preview browser" })
 
