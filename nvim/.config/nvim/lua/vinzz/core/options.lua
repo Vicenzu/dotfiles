@@ -48,6 +48,8 @@ opt.foldlevel = 99
 
 vim.g.editorconfig = true
 
+vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
+
 vim.api.nvim_create_autocmd("TextYankPost", {
 	callback = function()
 		vim.highlight.on_yank()

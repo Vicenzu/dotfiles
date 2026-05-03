@@ -5,8 +5,6 @@ return {
   dependencies = {
     "windwp/nvim-ts-autotag",
   },
-  -- 'main' dice a Lazy quale modulo usare per la funzione di setup
-  main = "nvim-treesitter.configs",
   -- 'opts' passa automaticamente questi parametri al setup() del plugin
   opts = {
     ensure_installed = {
@@ -26,6 +24,8 @@ return {
       "gitignore",
       "java",
       "c",
+      "bash",
+      "regex"
     },
     highlight = {
       enable = true,

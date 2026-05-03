@@ -107,6 +107,7 @@ alias uni='cd ~/Documents/Uni/'
 alias lg='lazygit'
 alias tt='tmux'
 alias pi='ssh vinzz@100.125.164.15'
+alias jproject='mvn archetype:generate -DgroupId=it.vicenzu.appunti -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false -DartifactId='
 
 alias dockerStart='sudo systemctl start docker.service'
 alias dockerStop='sudo systemctl stop docker.service'
