@@ -153,7 +153,7 @@ map("n", "<leader>pt", function() require("snacks").picker.todo_comments() end, 
 -- SNACKS WORKFLOW
 -- =============================================================================
 
-map("n", "<leader>lg", function() require("snacks").lazygit() end, { desc = "Lazygit" })
+map("n", "<leader>lg", function()local current_dir = vim.fn.expand("%:p:h") require("snacks").lazygit({cwd = current_dir}) end, { desc = "Lazygit" })
 map("n", "<leader>gl", function() require("snacks").lazygit.log() end, { desc = "Lazygit log" })
 map("n", "<leader>rN", function() require("snacks").rename.rename_file() end, { desc = "Rename file" })
 map("n", "<leader>dB", function() require("snacks").bufdelete() end, { desc = "Delete buffer" })
@@ -187,8 +187,8 @@ vim.api.nvim_create_autocmd("User", {
 		map("n", "<leader>hp", function() require("gitsigns").preview_hunk() end, { desc = "Gitsigns: preview hunk" })
 
     -- Snacks next word occurrence
-    map("n", "]w", function() require("snacks").words.jump(1) end, { desc = "Snacks: next word occurrence" })
-    map("n", "[w", function() require("snacks").words.jump(-1) end, { desc = "Snacks: prev word occurrence" })
+    map("n", "]]", function() require("snacks").words.jump(1) end, { desc = "Snacks: next word occurrence" })
+    map("n", "[[", function() require("snacks").words.jump(-1) end, { desc = "Snacks: prev word occurrence" })
 
 		-- TODO COMMENTS
 		map("n", "]t", function() require("todo-comments").jump_next() end, { desc = "Todo: next" })
