@@ -180,8 +180,8 @@ vim.api.nvim_create_autocmd("User", {
 		map("n", "<leader>hp", function() require("gitsigns").preview_hunk() end, { desc = "Gitsigns: preview hunk" })
 
     -- Snacks next word occurrence
-    map("n", "]]", function() require("snacks").words.jump(1) end, { desc = "Snacks: next word occurrence" })
-    map("n", "[[", function() require("snacks").words.jump(-1) end, { desc = "Snacks: prev word occurrence" })
+    map("n", "]w", function() require("snacks").words.jump(1) end, { desc = "Snacks: next word occurrence" })
+    map("n", "[w", function() require("snacks").words.jump(-1) end, { desc = "Snacks: prev word occurrence" })
 
 		-- TODO COMMENTS
 		map("n", "]t", function() require("todo-comments").jump_next() end, { desc = "Todo: next" })
@@ -193,13 +193,6 @@ vim.api.nvim_create_autocmd("User", {
 		-- UFO FOLDING
 		map("n", "zR", function() require("ufo").openAllFolds() end, { desc = "Open all folds" })
 		map("n", "zM", function() require("ufo").closeAllFolds() end, { desc = "Close all folds" })
-
-    -- HOVER
-    map("n", "K",  function() if package.loaded["hover"] then require("hover").hover() else vim.lsp.buf.hover() end end, { desc = "Hover" })
-    map("n", "gK", function() if package.loaded["hover"] then require("hover").hover_select() end end, { desc = "Hover: scegli sorgente" })
-    -- naviga tra le sorgenti dentro il popup:
-    map("n", "]]", function() if package.loaded["hover"] then require("hover").hover_switch("+") end end, { desc = "Hover: sorgente successiva" })
-    map("n", "[[", function() if package.loaded["hover"] then require("hover").hover_switch("-") end end, { desc = "Hover: sorgente precedente" })
 
 		require("which-key").add({
 			{ "<leader>f", group = "find (telescope)" },
