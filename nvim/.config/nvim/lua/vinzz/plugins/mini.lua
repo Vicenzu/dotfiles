@@ -87,14 +87,4 @@ return {
 			})
 		end,
 	},
-	-- Split & join
-	{
-		"echasnovski/mini.splitjoin",
-		config = function()
-			local miniSplitJoin = require("mini.splitjoin")
-			miniSplitJoin.setup({
-				mappings = { toggle = "" }, -- Disable default mapping
-			})
-		end,
-	},
 }

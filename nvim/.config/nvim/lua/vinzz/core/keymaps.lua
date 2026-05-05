@@ -109,13 +109,6 @@ map("n", "<leader>fa", "<cmd>Telescope<CR>", { desc = "Telescope: all" })
 map("n", "<leader>tth", "<cmd>Telescope themes<CR>", { desc = "Telescope: themes" })
 
 -- =============================================================================
--- MINI SPLITJOIN
--- =============================================================================
-
-map({ "n", "x" }, "sj", function() require("mini.splitjoin").join() end, { desc = "Join args" })
-map({ "n", "x" }, "sk", function() require("mini.splitjoin").split() end, { desc = "Split args" })
-
--- =============================================================================
 -- MINI SURROUND (non funzionano in questo file)
 -- =============================================================================
 -- map ({"n", "v"}, "sa", function() require("mini.surround").add() end, {desc = "Add surrounding"})
@@ -377,3 +370,12 @@ map("n", "<leader>sf", function() require("spectre").open_file_search() end, { d
 -- ============================================================================
 map("n", "<leader>mp", "<cmd>MarkdownPreviewToggle<CR>", { desc = "Markdown: preview browser" })
 
+-- ==========================================
+-- TREESJ (Split/Join)
+-- ==========================================
+map("n", "<leader>m", function() require('treesj').toggle() end, { desc = "Toggle Split/Join" })
+
+map({ "x", "o" }, "am", function() require "nvim-treesitter-textobjects.select".select_textobject("@function.outer", "textobjects") end)
+map({ "x", "o" }, "im", function() require "nvim-treesitter-textobjects.select".select_textobject("@function.inner", "textobjects") end)
+map({ "x", "o" }, "ac", function() require "nvim-treesitter-textobjects.select".select_textobject("@class.outer", "textobjects") end)
+map({ "x", "o" }, "ic", function() require "nvim-treesitter-textobjects.select".select_textobject("@class.inner", "textobjects") end)
