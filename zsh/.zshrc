@@ -94,6 +94,11 @@ export PATH="$HOME/.tmuxifier/bin:$PATH"
 eval "$(tmuxifier init -)"
 
 #---------------------------------
+#             CLAUDE
+#---------------------------------
+export PATH="$HOME/.local/bin:$PATH"
+
+#---------------------------------
 #             ALIASES
 #---------------------------------
 alias dots='cd ~/dotfiles'

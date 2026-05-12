@@ -4,16 +4,14 @@ return {
 	config = function()
 		local lint = require("lint")
 		local lint_augroup = vim.api.nvim_create_augroup("lint", { clear = true })
-		local eslint = lint.linters.eslint_d
 
-		-- if Eslint error configuration not found : change MasonInstall eslint@version or npm i -g eslint at a specific version
 		lint.linters_by_ft = {
 			javascript = { "biomejs" },
 			typescript = { "biomejs" },
 			javascriptreact = { "biomejs" },
 			typescriptreact = { "biomejs" },
 			svelte = { "biomejs" },
-			python = { "pylint" },
+			-- python = { "pylint" },  -- Da problemi
 			java = { "checkstyle" },
 			c = { "clangtidy" },
 			cpp = { "clangtidy" },
@@ -34,17 +32,6 @@ return {
 			parser = require("lint.parser").from_errorformat([[%f:%l:%c: %m]], { source = "checkstyle" }),
 		}
 
-		eslint.args = {
-			"--no-warn-ignored",
-			"--format",
-			"json",
-			"--stdin",
-			"--stdin-filename",
-			function()
-				return vim.fn.expand("%:p")
-			end,
-		}
-
 		vim.api.nvim_create_autocmd({ "BufWritePost", "InsertLeave", "LspAttach" }, {
 			group = lint_augroup,
 			callback = function()
@@ -52,8 +39,5 @@ return {
 			end,
 		})
 
-		vim.keymap.set("n", "<leader>l", function()
-			lint.try_lint()
-		end, { desc = "Trigger linting for current file" })
 	end,
 }

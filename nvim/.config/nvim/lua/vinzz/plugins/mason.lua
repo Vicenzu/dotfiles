@@ -42,8 +42,8 @@ return {
 		dependencies = { "williamboman/mason.nvim", "mfussenegger/nvim-lint" },
 		config = function()
 			require("mason-nvim-lint").setup({
-				ensure_installed = { "pylint", "biomejs" },
-				automatic_installation = true,
+				ensure_installed = { "biomejs" },
+				automatic_installation = { exclude = { "clangtidy", "checkstyle" } },
 			})
 		end,
 	},
