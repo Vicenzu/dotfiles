@@ -13,8 +13,8 @@ return {
 			svelte = { "biomejs" },
 			-- python = { "pylint" },  -- Da problemi
 			java = { "checkstyle" },
-			c = { "clangtidy" },
-			cpp = { "clangtidy" },
+			ruby = { "rubocop" },
+			php = { "phpcs" },
 		}
 
 		lint.linters.checkstyle = {

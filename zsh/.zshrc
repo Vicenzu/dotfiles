@@ -122,3 +122,7 @@ export EDITOR="nvim"
 
 # Set up fzf key bindings and fuzzy completion
 source <(fzf --zsh)
+
+
+# Load Angular CLI autocompletion.
+source <(ng completion script)
