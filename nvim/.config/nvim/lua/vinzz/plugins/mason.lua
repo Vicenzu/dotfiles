@@ -32,6 +32,7 @@ return {
 					"basedpyright",
 					"intelephense",
 					"clangd",
+					"marksman",
 				},
 			})
 		end,
