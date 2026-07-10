@@ -337,6 +337,8 @@ map("n", "<leader>ws", "<cmd>SessionSave<CR>", { desc = "Session: save" })
 
 map("n", "<leader>cl", "<cmd>MakePDF<CR>", { desc = "Markdown → PDF" })
 
+-- LaTeX: gestito da vimtex.lua (keymap buffer-local <leader>l* solo su filetype=tex)
+
 -- =============================================================================
 -- MERGE CONFLICTS
 -- =============================================================================

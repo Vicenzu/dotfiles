@@ -33,6 +33,7 @@ return {
 					"intelephense",
 					"clangd",
 					"marksman",
+					"ltex_plus",
 				},
 			})
 		end,

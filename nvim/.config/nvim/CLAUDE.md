@@ -32,29 +32,34 @@ Utilities live in `lua/vinzz/utils/`. Currently only `MakePDF.lua` exists, which
 | Code run | `code-runner.nvim` — `<leader>rr/rf` |
 | Session | `auto-sessions` — `<leader>wr/ws` |
 | Folding | `nvim-ufo` — `zR`/`zM` open/close all folds |
+| LaTeX | `vimtex` (latexmk + zathura) — buffer-local `<leader>l*` on `filetype=tex` |
 
 ## LSP Servers
 
 Managed by Mason. Configured in `lsp-config.lua`:
-`lua_ls`, `ts_ls`, `denols` (Deno projects only), `basedpyright`, `clangd`, `omnisharp`, `intelephense`, `emmet_language_server`, `sqlls`, `asm_lsp`
+`lua_ls`, `ts_ls`, `denols` (Deno projects only), `basedpyright`, `clangd`, `omnisharp`, `intelephense`, `emmet_language_server`, `sqlls`, `asm_lsp`, `lemminx` (XML), `marksman` (Markdown), `texlab` (LaTeX, system binary), `ltex_plus` (grammar, Italian), `angularls` (Angular projects only).
 
-`ts_ls` and `denols` are mutually exclusive — `ts_ls` is disabled when `deno.json`/`deno.jsonc` is present.
+`ts_ls` and `denols` are mutually exclusive — `ts_ls` is disabled when `deno.json`/`deno.jsonc` is present. `denols` and `angularls` start via `FileType` autocmds (probing `deno.json` / `angular.json` upward); the rest go through `vim.lsp.enable`.
 
 ## Formatters & Linters
 
 **Formatters** (conform.nvim):
 - JS/TS/JSX/TSX/CSS/HTML → `biome-check`
 - Lua → `stylua`
-- Python → `black`
+- Python → `isort` then `black`
 - Java → `google-java-format`
-- JSON/YAML/Markdown/GraphQL → `prettier`
+- C/C++ → `clang-format`
+- Ruby → `rubocop`
+- PHP/Svelte/JSON/YAML/Markdown/GraphQL/Liquid → `prettier`
+- LaTeX → `latexindent`
 
 Format-on-save is commented out; trigger manually with `<leader>gf`.
 
 **Linters** (nvim-lint, auto-runs on `BufWritePost`/`InsertLeave`/`LspAttach`):
 - JS/TS/JSX/TSX/Svelte → `biomejs`
 - Java → `checkstyle` (requires `~/.local/share/nvim/checkstyle/google_checks.xml`)
-- C/C++ → `clangtidy`
+- Ruby → `rubocop`
+- PHP → `phpcs`
 
 ## Keymaps — Leader Reference
 

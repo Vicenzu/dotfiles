@@ -265,6 +265,49 @@ return {
 			})
 
 			--------------------------------------------------------------------
+			-- TEXLAB (LaTeX) — binario di sistema (pacman), non gestito da mason
+			--------------------------------------------------------------------
+			vim.lsp.config("texlab", {
+				capabilities = capabilities,
+				settings = {
+					texlab = {
+						build = {
+							-- la build vera la fa vimtex (latexmk in watch mode);
+							-- texlab qui serve solo per diagnostica/completamento
+							onSave = false,
+						},
+						chktex = {
+							onOpenAndSave = true,
+							onEdit = false,
+						},
+						forwardSearch = {
+							executable = "zathura",
+							args = { "--synctex-forward", "%l:1:%f", "%p" },
+						},
+					},
+				},
+			})
+
+			--------------------------------------------------------------------
+			-- LTEX-LS-PLUS (grammatica/stile italiano — tex, bib, markdown)
+			--------------------------------------------------------------------
+			vim.lsp.config("ltex_plus", {
+				capabilities = capabilities,
+				settings = {
+					ltex = {
+						language = "it",
+						-- spellcheck disattivato: la tesi è piena di termini tecnici
+						-- inglesi (exploit, malware, worm, host, backdoor...) che
+						-- verrebbero segnalati come "parola sconosciuta" all'infinito.
+						-- Restano attive grammatica, punteggiatura, concordanze.
+						disabledRules = {
+							it = { "MORFOLOGIK_RULE_IT_IT" },
+						},
+					},
+				},
+			})
+
+			--------------------------------------------------------------------
 			-- ENABLE ALL SERVERS
 			--------------------------------------------------------------------
 			vim.lsp.enable({
@@ -279,6 +322,8 @@ return {
 				"intelephense",
 				"lemminx",
 				"marksman",
+				"texlab",
+				"ltex_plus",
 			})
 		end,
 	},

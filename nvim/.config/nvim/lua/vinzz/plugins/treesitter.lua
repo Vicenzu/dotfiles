@@ -27,6 +27,8 @@ return {
 			"c",
 			"bash",
 			"regex",
+			"latex",
+			"bibtex",
 		},
 
 		highlight = {

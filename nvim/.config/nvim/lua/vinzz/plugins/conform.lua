@@ -43,6 +43,7 @@ return {
 				php = { "prettier" },
 				c = { "clang-format" },
 				cpp = { "clang-format" },
+				tex = { "latexindent" },
 				markdown = { "prettier", "markdown-toc" },
 				-- ["markdown.mdx"] = { "prettier", "markdownlint", "markdown-toc" },
 			},
