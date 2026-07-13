@@ -1,5 +1,12 @@
 local opt = vim.opt
 
+-- Wrapping per righe lunghissime
+vim.o.wrap = true       -- Attiva il line wrap visivo
+vim.o.linebreak = true  -- Evita di tagliare le parole a metà (spezza solo sullo spazio)
+vim.o.breakindent = true -- Mantiene l'indentazione della riga anche quando va a capo
+vim.keymap.set("n", "j", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
+vim.keymap.set("n", "k", "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
+
 -- Tab / Indentation
 opt.tabstop = 2
 opt.shiftwidth = 2

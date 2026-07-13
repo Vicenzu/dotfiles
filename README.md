@@ -33,7 +33,7 @@ These dotfiles include configuration for my daily setup:
 
 ├── fastfetch/
 
-├── wofi/ -> 3 different configs (wofi2 default config) 
+├── wofi/ -> 3 different configs (wofi2 default config)
 
 ├── btop/
 
@@ -64,7 +64,7 @@ These dotfiles include configuration for my daily setup:
 
 ---
 
-## ⚙️ Usage 
+## ⚙️ Usage
 
 ### GNU Stow
 Clone the repo into your home directory:

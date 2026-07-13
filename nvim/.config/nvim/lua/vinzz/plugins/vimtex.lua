@@ -19,7 +19,9 @@ return {
 		}
 
 		-- viewer: zathura con SyncTeX (click nel pdf -> riga sorgente e viceversa)
-		vim.g.vimtex_view_method = "zathura"
+		vim.g.vimtex_view_method = "general"
+		vim.g.vimtex_view_general_viewer = "okular"
+		vim.g.vimtex_view_general_options = "--unique file:@pdf#src:@line@tex"
 
 		-- quickfix: mostra solo errori veri, non warning rumorosi dei pacchetti
 		vim.g.vimtex_quickfix_mode = 2
