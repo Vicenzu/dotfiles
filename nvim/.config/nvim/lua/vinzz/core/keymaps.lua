@@ -8,6 +8,10 @@ local function nmap(key, cmd) vim.keymap.set("n", key, cmd, { noremap = true, si
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
+-- Mappa j e k per muoversi tra le righe visive quando il wrap è attivo
+vim.keymap.set({"n", "v"}, 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
+vim.keymap.set({"n", "v"}, 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
+
 map("i", "jj", "<Esc>", { desc = "Exit insert mode" })
 
 map("v", "<", "<gv", { silent = true, noremap = true })
