@@ -1,4 +1,4 @@
-cat /home/vinzz/dotfiles/Ricing/VinzzASCII.txt
+cat /Users/vinzz/dotfiles/Ricing/VinzzASCII.txt
 
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 
@@ -88,12 +88,6 @@ export PATH=$JAVA_HOME/bin:$PATH
 export PATH="$PATH:$HOME:." #aggiunge la home e la cartella corrente al path di ricerca
 
 #---------------------------------
-#Variabile d'ambiente per tmuxifier
-#---------------------------------
-export PATH="$HOME/.tmuxifier/bin:$PATH"
-eval "$(tmuxifier init -)"
-
-#---------------------------------
 #             CLAUDE
 #---------------------------------
 export PATH="$HOME/.local/bin:$PATH"
@@ -115,14 +109,18 @@ alias pi='ssh vinzz@100.125.164.15'
 alias dockerStart='sudo systemctl start docker.service'
 alias dockerStop='sudo systemctl stop docker.service'
 
-#Fast Node Manager (needed for npm - node package manager)
-eval "$(fnm env --use-on-cd)"
-
 export EDITOR="nvim"
 
 # Set up fzf key bindings and fuzzy completion
 source <(fzf --zsh)
 
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/vinzz/.lmstudio/bin"
+# End of LM Studio CLI section
 
-# Load Angular CLI autocompletion.
-source <(ng completion script)
+
+PATH="/Users/vinzz/perl5/bin${PATH:+:${PATH}}"; export PATH;
+PERL5LIB="/Users/vinzz/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
+PERL_LOCAL_LIB_ROOT="/Users/vinzz/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
+PERL_MB_OPT="--install_base \"/Users/vinzz/perl5\""; export PERL_MB_OPT;
+PERL_MM_OPT="INSTALL_BASE=/Users/vinzz/perl5"; export PERL_MM_OPT;
