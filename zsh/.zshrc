@@ -108,6 +108,7 @@ alias tt='tmux'
 alias pi='ssh vinzz@100.125.164.15'
 alias dockerStart='sudo systemctl start docker.service'
 alias dockerStop='sudo systemctl stop docker.service'
+alias python='python3'
 
 export EDITOR="nvim"
 
