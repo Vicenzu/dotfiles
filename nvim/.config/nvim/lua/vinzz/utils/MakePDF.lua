@@ -164,7 +164,7 @@ vim.api.nvim_create_user_command("MakePDF", function()
 		input,
 		"-o",
 		output,
-		"--pdf-engine=xelatex",
+		"--pdf-engine=mactex",
 		"--listings", -- FONDAMENTALE: Dice a Pandoc di usare il pacchetto listings
 		"-H",
 		preamble_path, -- Include il nostro file di stile nell'header

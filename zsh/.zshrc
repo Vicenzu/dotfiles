@@ -98,16 +98,11 @@ export PATH="$HOME/.local/bin:$PATH"
 alias dots='cd ~/dotfiles'
 alias dotsync='cd ~/dotfiles && git add . && git commit -m "update dotfiles" && git push'
 alias dotpull='cd ~/dotfiles && git pull && stow -R .'
-alias algs='cd ~/Documents/Algorithms/'
-alias algssync='cd ~/Documents/Algorithms/ && git add . && git commit -m "update Algorithms" && git push '
-alias cl='cleaning.sh'
 alias ff='fastfetch'
 alias uni='cd ~/Documents/Uni/'
 alias lg='lazygit'
 alias tt='tmux'
 alias pi='ssh vinzz@100.125.164.15'
-alias dockerStart='sudo systemctl start docker.service'
-alias dockerStop='sudo systemctl stop docker.service'
 alias python='python3'
 
 export EDITOR="nvim"
