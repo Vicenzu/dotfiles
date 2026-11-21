@@ -104,6 +104,7 @@ alias lg='lazygit'
 alias tt='tmux'
 alias pi='ssh vinzz@100.125.164.15'
 alias python='python3'
+alias proj='cd ~/Documents/Projects/'
 
 export EDITOR="nvim"
 

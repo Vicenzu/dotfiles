@@ -1,18 +1,19 @@
 -- Markdown To Pdf (Latex format)
 vim.api.nvim_create_user_command("MakePDF", function()
-	-- 1. Definiamo il preambolo LaTeX (i tuoi pacchetti e stili)
+	-- 1. Definiamo il preambolo LaTeX evitando conflitti con il template di Pandoc
 	local latex_preamble = [[
-% ── Pacchetti base ─────────────────────────────────────────────────────
-\usepackage{xcolor}
+% ── Pacchetti aggiuntivi (Pandoc carica già amsmath, amssymb, graphicx, xcolor, hyperref, booktabs) ──
 \usepackage{listings}
-\usepackage{graphicx}
-\usepackage{amsmath}
-\usepackage{amssymb}
 \usepackage{mathrsfs}
 \usepackage{float}
 \usepackage{cancel}
 \usepackage[figurename=Figura]{caption}
 \usepackage{microtype}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{mdframed}
 
 % ── Colori tema ─────────────────────────────────────────────────────────
 \definecolor{accent}{HTML}{2563EB}
@@ -26,17 +27,7 @@ vim.api.nvim_create_user_command("MakePDF", function()
 \definecolor{quotebar}{HTML}{3B82F6}
 \definecolor{quotebg}{HTML}{EFF6FF}
 
-% ── Hyperref ────────────────────────────────────────────────────────────
-\usepackage{hyperref}
-\hypersetup{
-  colorlinks=true,
-  linkcolor=accentdark,
-  urlcolor=accent,
-  citecolor=accent,
-}
-
 % ── Titoli sezioni ───────────────────────────────────────────────────────
-\usepackage{titlesec}
 \titleformat{\section}
   {\Large\bfseries\color{accentdark}}
   {\thesection}{0.8em}{}[\vspace{2pt}\color{accent}\titlerule\vspace{4pt}]
@@ -51,7 +42,6 @@ vim.api.nvim_create_user_command("MakePDF", function()
 \titlespacing{\subsubsection}{0pt}{10pt}{2pt}
 
 % ── Header / Footer ──────────────────────────────────────────────────────
-\usepackage{fancyhdr}
 \pagestyle{fancy}
 \fancyhf{}
 \fancyhead[L]{\small\color{codegray}\slshape\leftmark}
@@ -60,18 +50,12 @@ vim.api.nvim_create_user_command("MakePDF", function()
 \renewcommand{\headrule}{{\color{framerule}\hrule width\headwidth height\headrulewidth}}
 \setlength{\headheight}{14pt}
 
-% ── Tabelle ─────────────────────────────────────────────────────────────
-\usepackage{booktabs}
-\usepackage{array}
+% ── Tabelle & Liste ─────────────────────────────────────────────────────
 \renewcommand{\arraystretch}{1.35}
-
-% ── Liste ───────────────────────────────────────────────────────────────
-\usepackage{enumitem}
 \setlist[itemize]{leftmargin=1.5em,itemsep=2pt,topsep=4pt,parsep=0pt}
 \setlist[enumerate]{leftmargin=1.5em,itemsep=2pt,topsep=4pt,parsep=0pt}
 
 % ── Blockquote stilizzato ────────────────────────────────────────────────
-\usepackage{mdframed}
 \mdfdefinestyle{quotestyle}{
   leftline=true, rightline=false, topline=false, bottomline=false,
   linewidth=3pt, linecolor=quotebar,
@@ -84,13 +68,7 @@ vim.api.nvim_create_user_command("MakePDF", function()
   {\begin{mdframed}[style=quotestyle]\itshape\color{accentdark}}
   {\end{mdframed}}
 
-% ── Immagini: dimensione + posto esatto ──────────────────────────────────
-\makeatletter
-\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
-\def\maxheight{\ifdim\Gin@nat@height>0.85\textheight 0.85\textheight\else\Gin@nat@height\fi}
-\makeatother
-\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
-
+% ── Immagini: forza posizionamento [H] ───────────────────────────────────
 \let\origfigure\figure
 \let\endorigfigure\endfigure
 \renewenvironment{figure}[1][]{%
@@ -143,49 +121,74 @@ vim.api.nvim_create_user_command("MakePDF", function()
 }
 ]]
 
-	-- 2. Scriviamo questo preambolo in un file temporaneo nella cache di Neovim
+	-- 2. Scriviamo il preambolo nella cache di Neovim
 	local preamble_path = vim.fn.stdpath("cache") .. "/custom_preamble.tex"
 	local file = io.open(preamble_path, "w")
 	if file then
 		file:write(latex_preamble)
 		file:close()
 	else
-		print("Errore: Impossibile creare il file di preambolo")
+		vim.notify("Errore: Impossibile creare il file di preambolo", vim.log.levels.ERROR)
 		return
 	end
 
 	-- 3. Configurazione Pandoc
-	local current_file_dir = vim.fn.expand("%:p:h") -- La cartella dove si trova il file .md
+	local current_file_dir = vim.fn.expand("%:p:h")
 	local input = vim.fn.expand("%:t")
 	local output = vim.fn.expand("%:t:r") .. ".pdf"
+
+	-- Aggiunge il path di MacTeX se Neovim è stato aperto da GUI e non da terminale
+	local env_path = vim.env.PATH or ""
+	if not string.find(env_path, "/Library/TeX/texbin") then
+		env_path = "/Library/TeX/texbin:" .. env_path
+	end
 
 	local cmd = {
 		"pandoc",
 		input,
 		"-o",
 		output,
-		"--pdf-engine=mactex",
-		"--listings", -- FONDAMENTALE: Dice a Pandoc di usare il pacchetto listings
+		"--pdf-engine=xelatex", -- <-- CORRETTO (non "mactex")
+		"--listings",
 		"-H",
-		preamble_path, -- Include il nostro file di stile nell'header
-		"--resource-path=.", -- Dice a pandoc di cercare le immagini nella cartella corrente
+		preamble_path,
+		"--resource-path=.",
 		"-V",
 		"geometry:margin=2.5cm",
 		"-V",
 		"papersize=a4",
 		"-V",
-		"lang=it", -- Imposta la lingua del documento (opzionale)
+		"lang=it",
+		"-V",
+		"colorlinks=true", -- <-- Gestito da Pandoc per evitare option clash con hyperref
+		"-V",
+		"linkcolor=accentdark",
+		"-V",
+		"urlcolor=accent",
+		"-V",
+		"citecolor=accent",
 	}
 
-	-- 4. Esecuzione del comando
-	print("Generazione PDF in corso...")
+	local stderr_lines = {}
+
+	-- 4. Esecuzione del comando con cattura errori
+	vim.notify("Generazione PDF in corso...", vim.log.levels.INFO)
 	vim.fn.jobstart(cmd, {
 		cwd = current_file_dir,
+		env = { PATH = env_path },
+		on_stderr = function(_, data)
+			for _, line in ipairs(data) do
+				if line ~= "" then
+					table.insert(stderr_lines, line)
+				end
+			end
+		end,
 		on_exit = function(_, code)
 			if code == 0 then
-				print("✅ PDF generato con successo: " .. output)
+				vim.notify("✅ PDF generato con successo: " .. output, vim.log.levels.INFO)
 			else
-				print("❌ Errore nella conversione. Controlla la sintassi LaTeX.")
+				local err_msg = table.concat(stderr_lines, "\n")
+				vim.notify("❌ Errore nella conversione:\n" .. err_msg, vim.log.levels.ERROR)
 			end
 		end,
 	})
